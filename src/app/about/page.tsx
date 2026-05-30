@@ -13,7 +13,11 @@ import Link from "next/link";
 
 import PageHeader from "@/components/PageHeader";
 
-export const dynamic = "force-static";
+// Phase 12A (CI fix): the global <AppShell> renders the <DatasetModeBanner>
+// which calls Prisma. Even though /about itself has no Prisma calls, the
+// layout it inherits does — so this page must be dynamic to avoid hitting
+// the database during the static prerender pass.
+export const dynamic = "force-dynamic";
 
 export default function AboutPage() {
   return (

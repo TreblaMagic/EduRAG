@@ -631,8 +631,12 @@ Goal: Push the prototype to a public GitHub repo and a live Vercel demo without 
 - [x] Add `CONTRIBUTING.md` — local setup, repo conventions (phase-based history, module layout, engine abstractions), test conventions, the binding honesty constraints, commit + PR style, manual-only operations.
 - [x] README light polish — badge counts updated to **305 passing tests** + phase chip to `12A github readiness`; license badge flipped from `TBD` to `MIT`; License section rewritten + new Contributing section added; Phase 12 row added to the roadmap pointing at `docs/deployment-github-vercel-plan.md`.
 - [x] **305 / 305** tests pass · typecheck clean · `npm run build` succeeds with all 16 routes — same surface as Phase 11; no code logic changed.
+- [x] **CI fix (2026-05-30):** the first GitHub Actions run surfaced a build crash — `prisma.student.count()` was invoked during the static prerender pass because the global `<AppShell>` header renders `<DatasetModeBanner>` (server component → Prisma). Three coordinated fixes shipped as part of 12A:
+  - `.github/workflows/ci.yml` now runs `npx prisma migrate deploy` (with a `prisma db push` fallback) between `prisma generate` and the build, so the SQLite tables exist before Next.js evaluates server components.
+  - `/about` flipped from `force-static` to `force-dynamic` (it inherits the Prisma-touching layout, so it can't be statically prerendered).
+  - `<DatasetModeBanner>` now wraps the orchestrator call in `try/catch` and falls back to `DEFAULT_DATASET_STATE.activeMode` if Prisma is unreachable — defence in depth for any future build environment that doesn't run the migration step.
 
-**Deliverable (achieved):** repo is GitHub-ready. CI workflow + dependency automation + review routing + contributor docs all in place. No source files under `src/`, `prisma/`, or root configs were touched — Phase 12A is pure packaging.
+**Deliverable (achieved):** repo is GitHub-ready. CI workflow + dependency automation + review routing + contributor docs all in place. Build passes locally and in CI. Phase 12A is pure packaging on the source side; the one component touched (`DatasetModeBanner`) only gained a defensive fallback — no behaviour change in the happy path.
 
 **Operator's manual step (remaining):**
 
