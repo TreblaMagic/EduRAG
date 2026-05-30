@@ -1,0 +1,69 @@
+# Phase 12A — EduRAG CI
+#
+# Typecheck + tests + build on every PR to main and every push to main.
+# Deliberately does NOT deploy — Vercel handles its own build/deploy when
+# the repo is connected (Phase 12C).
+#
+# Uses SQLite for prisma generate / build / tests because the test suite
+# never hits a real database (every test mocks prisma or exercises pure
+# functions). DATABASE_PROVIDER + DATABASE_URL are set defensively so the
+# workflow keeps working after Phase 12B switches the schema to the
+# env-driven multi-provider setup.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DATABASE_PROVIDER: sqlite
+      DATABASE_URL: "file:./prisma/ci.db"
+      # Keep CI noise low for the optional Python engine probes — there's
+      # no Python on the GitHub runner by default and the TS baseline is
+      # the only thing the tests exercise.
+      ENABLE_PYTHON_ENGINE: "false"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache Next.js build output
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-next-${{ hashFiles('package-lock.json') }}-${{ hashFiles('src/**/*.ts', 'src/**/*.tsx', 'prisma/schema.prisma') }}
+          restore-keys: |
+            ${{ runner.os }}-next-${{ hashFiles('package-lock.json') }}-
+            ${{ runner.os }}-next-
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build

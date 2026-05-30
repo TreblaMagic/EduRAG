@@ -1,0 +1,33 @@
+# =============================================================================
+# EduRAG — optional docker-compose.
+#
+# Local-first remains the recommended path. This compose file exists so a
+# reviewer can run a fully isolated demo with two commands:
+#
+#   docker compose build
+#   docker compose up
+#
+# Visit http://localhost:3000.
+#
+# Volumes:
+#   - edurag_db   : SQLite database (survives container rebuilds)
+#   - edurag_data : Generated synthetic CSV + Shell University seed
+# =============================================================================
+
+services:
+  edurag:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: "file:./prisma/dev.db"
+    volumes:
+      - edurag_db:/app/prisma
+      - edurag_data:/app/data
+    # Restart unless explicitly stopped — helps for unattended demos.
+    restart: unless-stopped
+
+volumes:
+  edurag_db:
+  edurag_data:

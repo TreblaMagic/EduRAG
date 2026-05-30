@@ -1,0 +1,430 @@
+// =============================================================================
+// EduRAG — Prisma schema (SQLite for MVP, designed to migrate cleanly to Postgres)
+//
+// Migration notes (SQLite -> PostgreSQL):
+//   - Switch datasource provider to "postgresql" and DATABASE_URL accordingly.
+//   - String columns holding JSON (e.g. InterventionSimulation.changeJson) can
+//     be promoted to `Json` for native PG JSONB.
+//   - String fields documented as enum-like (resource type, activity type, etc.)
+//     can be promoted to true Prisma `enum` definitions (SQLite does not
+//     support enums; Postgres does).
+//   - All `cuid()` IDs remain valid in Postgres without modification.
+//   - All indexes, unique constraints, and cascades carry over unchanged.
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------------------------------------
+// Core entities
+// -----------------------------------------------------------------------------
+
+/// A learner. `externalId` is a stable identifier from the source LMS export
+/// (e.g. the synthetic CSV) and is used during ingestion to avoid duplicates.
+model Student {
+  id         String   @id @default(cuid())
+  externalId String   @unique
+  firstName  String?
+  lastName   String?
+  cohort     String
+  priorGpa   Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  enrollments     Enrollment[]
+  activities      ActivityLog[]
+  grades          Grade[]
+  weeklySummaries WeeklyEngagementSummary[]
+  rdiScores       RdiScore[]
+  courseFeatures  CourseFeatureSummary[]
+  interventions   InterventionSimulation[]
+  advisorNotes    AdvisorNote[]
+  predictions     BaselinePrediction[]
+  decisions       InterventionDecision[]
+
+  @@index([cohort])
+}
+
+/// A course offering. `weeks` is the planned course length (12-15 for MVP).
+model Course {
+  id    String @id @default(cuid())
+  code  String @unique
+  title String
+  weeks Int
+
+  enrollments     Enrollment[]
+  resources       Resource[]
+  activities      ActivityLog[]
+  grades          Grade[]
+  weeklySummaries WeeklyEngagementSummary[]
+  rdiScores       RdiScore[]
+  courseFeatures  CourseFeatureSummary[]
+  causalEstimates CausalEstimate[]
+  interventions   InterventionSimulation[]
+  advisorNotes    AdvisorNote[]
+  predictions     BaselinePrediction[]
+  decisions       InterventionDecision[]
+}
+
+/// Many-to-many bridge: which students are enrolled in which courses.
+model Enrollment {
+  id         String   @id @default(cuid())
+  studentId  String
+  courseId   String
+  enrolledAt DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId])
+  @@index([courseId])
+}
+
+/// A learning resource available within a course.
+/// `type` is enum-like: VIDEO | READING | QUIZ | FORUM | LAB.
+/// (SQLite has no native enum; promote to a Prisma `enum` on Postgres.)
+/// `externalId` is the stable identifier from the source export (e.g. the
+/// generator's `CS-201-VID-001`) and lets re-imports stay idempotent.
+model Resource {
+  id         String @id @default(cuid())
+  externalId String @unique
+  courseId   String
+  type       String
+  title      String
+
+  course     Course        @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  activities ActivityLog[]
+
+  @@index([courseId])
+  @@index([type])
+}
+
+// -----------------------------------------------------------------------------
+// Activity & outcomes
+// -----------------------------------------------------------------------------
+
+/// A single raw LMS event (view, submit, post, etc.) — the atomic unit of
+/// behavioural data. Indexed by (student, course, week) for fast aggregation
+/// during preprocessing.
+///
+/// `activityType` is enum-like: VIEW | SUBMIT | POST | COMMENT | DOWNLOAD.
+/// `quizScore` is populated only when (resource.type=QUIZ, activityType=SUBMIT).
+model ActivityLog {
+  id              String   @id @default(cuid())
+  studentId       String
+  courseId        String
+  resourceId      String
+  activityType    String
+  timestamp       DateTime
+  durationSeconds Int
+  weekNumber      Int
+  quizScore       Float?
+
+  student  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+
+  @@index([studentId, courseId, weekNumber])
+  @@index([resourceId])
+  @@index([timestamp])
+}
+
+/// Pre-aggregated weekly behaviour per student × course. Written by the
+/// preprocessing pipeline (Phase 2). Stored to avoid re-aggregating raw events
+/// for every dashboard read.
+model WeeklyEngagementSummary {
+  id                   String @id @default(cuid())
+  studentId            String
+  courseId             String
+  weekNumber           Int
+  activityCount        Int
+  loginCount           Int
+  totalDurationSeconds Int
+  submissionCount      Int
+  quizSubmissionCount  Int
+  forumPosts           Int
+  resourceTypeCount    Int
+  averageQuizScore     Float?
+  engagementScore      Float
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId, weekNumber])
+  @@index([courseId, weekNumber])
+}
+
+/// Final grade for a student-course pair (0-100 scale, plus a letter band).
+model Grade {
+  id         String   @id @default(cuid())
+  studentId  String
+  courseId   String
+  finalGrade Float
+  letter     String
+  recordedAt DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId])
+}
+
+// -----------------------------------------------------------------------------
+// Derived & model outputs
+// -----------------------------------------------------------------------------
+
+/// Resource Diversity Index per student × course × week, normalised to [0, 1].
+/// See docs/data-model.md §2 for the formula.
+model RdiScore {
+  id         String   @id @default(cuid())
+  studentId  String
+  courseId   String
+  weekNumber Int
+  value      Float
+  computedAt DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId, weekNumber])
+  @@index([courseId, weekNumber])
+}
+
+/// Per-(student, course) derived feature row used as input to the causal
+/// estimator and (in Phase 4) the what-if simulator. Mirrors the columns
+/// in docs/features/phase-3-causal-graph-driver-identification.md §3.
+///
+/// Trends and consistency are stored here (not on WeeklyEngagementSummary)
+/// because they are term-level reductions over the weekly series.
+model CourseFeatureSummary {
+  id                    String   @id @default(cuid())
+  studentId             String
+  courseId              String
+  meanEngagement        Float
+  meanRdi               Float
+  meanLoginsPerWeek     Float
+  totalActivity         Int
+  weeksObserved         Int
+  engagementConsistency Float
+  engagementTrend       Float
+  forumParticipation    Float
+  quizConsistency       Float
+  assessmentTrend       Float
+  computedAt            DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId])
+  @@index([courseId])
+}
+
+/// Output of the causal engine: cohort-level estimated effect of a
+/// behavioural treatment on an outcome (typically FinalGrade), with a
+/// bootstrap confidence interval, sample size, adjustment set, and
+/// refutation-check payload. See docs/causal-methodology.md.
+///
+/// **Cohort-level, not per-student.** A regression β is the average effect
+/// across the cohort. Per-student counterfactual deltas are recorded in
+/// `InterventionSimulation` (Phase 4) by applying β to each student's
+/// hypothetical change.
+///
+/// `adjustmentSet`, `refutationJson`, and `notesJson` are JSON-encoded
+/// strings (SQLite has no native JSON; promote to `Json` on Postgres).
+model CausalEstimate {
+  id             String   @id @default(cuid())
+  courseId       String
+  treatment      String
+  outcome        String
+  adjustmentSet  String
+  estimate       Float
+  ciLow          Float
+  ciHigh         Float
+  ciLevel        Float
+  sampleSize     Int
+  method         String
+  bootstrapIters Int
+  refutationJson String?
+  notesJson      String?
+  generatedAt    DateTime @default(now())
+
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, treatment, outcome])
+  @@index([treatment])
+}
+
+/// Output of the what-if engine: one counterfactual intervention applied to
+/// one student in one course, with its projected outcome and bootstrap-CI
+/// range. Cohort-level β is applied to a per-student feature delta — never
+/// claimed as a personal causal effect.
+///
+/// Honesty constraints (enforced in `simulator.ts` and its tests):
+///   - `explanation` text uses "model-based", "cohort-average", and
+///     "estimated improvement range" phrasing.
+///   - It MUST NOT contain "guaranteed", "proven", "definitely", "will improve".
+///   - `confidence` reflects refutation-check pass count from `CausalEstimate`.
+///
+/// `notesJson` is a JSON-encoded string carrying `assumptions[]`, `headroom`,
+/// and `weaknessScore` (promote to native `Json` on Postgres).
+model InterventionSimulation {
+  id               String   @id @default(cuid())
+  studentId        String
+  courseId         String
+  interventionName String
+  treatment        String
+  baselineValue    Float
+  proposedValue    Float
+  appliedDelta     Float
+  estimatedEffect  Float
+  baselineGrade    Float
+  projectedGrade   Float
+  projectedLow     Float
+  projectedHigh    Float
+  rankScore        Float
+  confidence       String
+  explanation      String
+  notesJson        String
+  generatedAt      DateTime @default(now())
+
+  student   Student              @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course    Course               @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  decision  InterventionDecision?
+
+  @@unique([studentId, courseId, interventionName])
+  @@index([courseId, treatment])
+  @@index([courseId, rankScore])
+}
+
+/// Phase 11 — advisor/feedback-loop layer on top of `InterventionSimulation`.
+///
+/// One row per (simulation, decision) — never more than one decision per
+/// simulation. Statuses are persisted explicitly; the absence of a row
+/// implies the recommendation is in its default **proposed** state.
+///
+/// **Honesty constraints (enforced in `intervention-tracking/` + tests):**
+///   - `followUpOutcome` is *observational* text. It is NOT proof of
+///     causation. The UI must surface this caveat whenever the field is
+///     non-null.
+///   - `advisorNote` is free-form context, NOT a validation of the
+///     causal model. Notes never claim a causal mechanism.
+///   - Forbidden in note + outcome text: "guaranteed", "proven",
+///     "confirms causation". Asserted by tests on the constants
+///     module + by the UI banners.
+///
+/// `notesJson` (reserved) is a JSON-encoded string for future structured
+/// metadata (priority, follow-up dates, additional advisor commentary).
+model InterventionDecision {
+  id                       String   @id @default(cuid())
+  studentId                String
+  courseId                 String
+  interventionSimulationId String   @unique
+  status                   String
+  advisorNote              String?
+  followUpOutcome          String?
+  followUpObserved         Boolean  @default(false)
+  followUpRecordedAt       DateTime?
+  notesJson                String?
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  student                Student                @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course                 Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  interventionSimulation InterventionSimulation @relation(fields: [interventionSimulationId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([courseId, status])
+  @@index([updatedAt])
+}
+
+// -----------------------------------------------------------------------------
+// Phase 5.5 — Shell University integration
+// -----------------------------------------------------------------------------
+
+/// Advisor note synced from the Shell University mock LMS/SIS. An advisor's
+/// free-text observation about a student in (optionally) a specific course.
+/// New entity introduced by the Shell University integration — proves the
+/// sync pipeline can carry data EduRAG didn't previously model.
+model AdvisorNote {
+  id         String   @id @default(cuid())
+  externalId String   @unique
+  studentId  String
+  courseId   String?
+  noteText   String
+  authoredBy String
+  authoredAt DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course? @relation(fields: [courseId], references: [id], onDelete: SetNull)
+
+  @@index([studentId])
+  @@index([courseId])
+  @@index([authoredAt])
+}
+
+/// Output of the **Phase 8 baseline prediction layer** — a traditional
+/// statistical / ML model that produces a probability of being at-risk and
+/// (optionally) a predicted final grade. Persisted side-by-side with the
+/// causal `CausalEstimate` / `InterventionSimulation` rows so the dashboard
+/// can render the explicit "prediction vs intervention" comparison that is
+/// the whole point of Phase 8.
+///
+/// **Honesty constraints (enforced in `baseline-ml/` and its tests):**
+///   - `notes` text uses "probabilistic prediction", "feature importance ≠ causal effect".
+///   - It MUST NOT contain "guaranteed", "proven", "causal effect of this student".
+///   - The UI pairs every row with a banner that says prediction does NOT
+///     imply intervention recommendation.
+///
+/// `featureImportanceJson` and `notesJson` are JSON-encoded strings
+/// (promote to native `Json` on Postgres).
+model BaselinePrediction {
+  id                    String   @id @default(cuid())
+  studentId             String
+  courseId              String
+  modelType             String
+  predictedRiskProb     Float
+  predictedGrade        Float?
+  riskClass             String
+  predictionConfidence  String
+  threshold             Float
+  featureImportanceJson String
+  notesJson             String
+  generatedAt           DateTime @default(now())
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId, modelType])
+  @@index([courseId, modelType])
+  @@index([courseId, predictedRiskProb])
+}
+
+/// One row per sync attempt against a data source (Shell University,
+/// CSV upload, …). Drives the integration status UI and lets `npm run
+/// sync:university` see if a previous run is still in flight.
+///
+/// `scopeJson` and `summaryJson` are JSON strings (promote to native
+/// `Json` on Postgres).
+model SyncLog {
+  id          String   @id @default(cuid())
+  source      String
+  status      String
+  startedAt   DateTime
+  finishedAt  DateTime
+  durationMs  Int
+  scopeJson   String
+  summaryJson String
+  message     String?
+  createdAt   DateTime @default(now())
+
+  @@index([source, startedAt])
+  @@index([startedAt])
+}

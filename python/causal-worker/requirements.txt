@@ -1,0 +1,14 @@
+# EduRAG — optional advanced causal worker.
+# Installing this is **optional**. The app runs without it; the TypeScript
+# baseline engine remains the default. Install only if you want DoWhy +
+# causal-learn discovery support.
+
+# Core numerical stack.
+numpy>=1.26
+pandas>=2.1
+scikit-learn>=1.4
+networkx>=3.2
+
+# Causal inference & discovery.
+dowhy>=0.11
+causal-learn>=0.1.3.7

@@ -1,0 +1,40 @@
+# Phase 12A — automatic dependency PRs.
+#
+# Weekly cadence keeps noise low; the limit caps blast radius if a major
+# bump regresses anything. CI catches breakage automatically on every PR
+# Dependabot opens.
+
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:00"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - dependencies
+      - npm
+    groups:
+      # Group minor + patch updates together so the PR feed is manageable.
+      # Major bumps still come as individual PRs (no `update-types` filter).
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "08:00"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore(ci)"
+    labels:
+      - dependencies
+      - github-actions

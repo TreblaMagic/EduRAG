@@ -1,0 +1,13 @@
+# Keep the build context lean — these are reproduced inside the image.
+node_modules
+.next
+.git
+.gitignore
+.env
+.env.local
+*.log
+coverage
+docs/reports
+data/raw/*.csv
+data/processed
+.DS_Store
