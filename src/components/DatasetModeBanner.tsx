@@ -14,6 +14,7 @@
 import Link from "next/link";
 
 import {
+  DEFAULT_DATASET_STATE,
   metadataFor,
   type DatasetMode,
   type DatasetModeMetadata,
@@ -28,6 +29,22 @@ interface Props {
   detail?: string;
   /** Compact variant for tight headers. */
   compact?: boolean;
+}
+
+/**
+ * Phase 12A CI fix: never let a missing/unmigrated database crash the
+ * shared layout. `getDatasetModeOverview` does Prisma probes; on a fresh
+ * build container (or any environment where the schema hasn't been
+ * applied) those probes can throw. We catch and fall back to the
+ * default mode so the page still renders — broken DB shows the default
+ * chip, not a 500.
+ */
+async function resolveActiveMode(): Promise<DatasetMode> {
+  try {
+    return (await getDatasetModeOverview()).activeMode;
+  } catch {
+    return DEFAULT_DATASET_STATE.activeMode;
+  }
 }
 
 const ACCENT_CLASSES: Record<DatasetModeMetadata["accent"], string> = {
@@ -47,7 +64,7 @@ export default async function DatasetModeBanner({
   detail,
   compact = false,
 }: Props) {
-  const resolvedMode = mode ?? (await getDatasetModeOverview()).activeMode;
+  const resolvedMode = mode ?? (await resolveActiveMode());
   const metadata = metadataFor(resolvedMode);
 
   const summary = detail ?? metadata.tagline;

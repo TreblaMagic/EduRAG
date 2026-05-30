@@ -1,14 +1,25 @@
-# Phase 12A — EduRAG CI
+# Phase 12A — EduRAG CI (fix: apply Prisma migrations before next build)
 #
 # Typecheck + tests + build on every PR to main and every push to main.
 # Deliberately does NOT deploy — Vercel handles its own build/deploy when
 # the repo is connected (Phase 12C).
 #
-# Uses SQLite for prisma generate / build / tests because the test suite
-# never hits a real database (every test mocks prisma or exercises pure
-# functions). DATABASE_PROVIDER + DATABASE_URL are set defensively so the
-# workflow keeps working after Phase 12B switches the schema to the
-# env-driven multi-provider setup.
+# Why we run `prisma migrate deploy` before `next build`:
+#
+#   Next.js evaluates server components during the build to collect page
+#   data even for dynamic pages, and the global <AppShell> renders
+#   <DatasetModeBanner> which calls Prisma. Without an applied schema the
+#   underlying SQLite database file has no tables and the build crashes
+#   with "The table `main.Student` does not exist".
+#
+#   `prisma migrate deploy` is non-interactive and idempotent — it applies
+#   every committed migration if the DB exists, or creates it from scratch
+#   if it doesn't. We don't run `prisma db seed` in CI — the goal is only
+#   to ensure tables exist so the build's Prisma probes return empty
+#   results (zero rows) instead of throwing.
+#
+# Uses SQLite throughout. Phase 12B will introduce the env-driven multi-
+# provider schema; the env vars below are already shaped for that future.
 
 name: CI
 
@@ -28,7 +39,7 @@ jobs:
     timeout-minutes: 10
     env:
       DATABASE_PROVIDER: sqlite
-      DATABASE_URL: "file:./prisma/ci.db"
+      DATABASE_URL: "file:./prisma/dev.db"
       # Keep CI noise low for the optional Python engine probes — there's
       # no Python on the GitHub runner by default and the TS baseline is
       # the only thing the tests exercise.
@@ -58,6 +69,17 @@ jobs:
 
       - name: Generate Prisma client
         run: npx prisma generate
+
+      - name: Apply Prisma migrations
+        # `migrate deploy` is the right tool for CI — non-interactive,
+        # idempotent, applies every committed migration. If migrations
+        # are missing or incompatible for any reason, fall back to
+        # `prisma db push` which materialises the current schema directly
+        # against the empty SQLite DB without needing a migration history.
+        run: |
+          npx prisma migrate deploy \
+            || (echo "migrate deploy failed; falling back to db push" \
+                && npx prisma db push --skip-generate --accept-data-loss)
 
       - name: Typecheck
         run: npx tsc --noEmit
