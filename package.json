@@ -12,6 +12,7 @@
     "prisma:generate": "prisma generate",
     "prisma:format": "prisma format",
     "prisma:validate": "prisma validate",
+    "prisma:seed": "prisma db seed",
     "data:generate": "python scripts/generate_synthetic_dataset.py",
     "setup": "tsx src/server/bootstrap/setup-cli.ts",
     "demo": "tsx src/server/bootstrap/demo-cli.ts",
@@ -50,5 +51,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }

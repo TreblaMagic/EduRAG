@@ -1,0 +1,1402 @@
+[
+  {
+    "student_id": "STU-0001",
+    "course_code": "CS-201",
+    "final_grade": 54.19,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0002",
+    "course_code": "CS-201",
+    "final_grade": 77.04,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0003",
+    "course_code": "CS-201",
+    "final_grade": 60.13,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0004",
+    "course_code": "CS-201",
+    "final_grade": 49.85,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0005",
+    "course_code": "CS-201",
+    "final_grade": 51.4,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0006",
+    "course_code": "CS-201",
+    "final_grade": 48.06,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0007",
+    "course_code": "CS-201",
+    "final_grade": 46.87,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0008",
+    "course_code": "CS-201",
+    "final_grade": 65.97,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0009",
+    "course_code": "CS-201",
+    "final_grade": 23.64,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0010",
+    "course_code": "CS-201",
+    "final_grade": 70.83,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0011",
+    "course_code": "CS-201",
+    "final_grade": 58.92,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0012",
+    "course_code": "CS-201",
+    "final_grade": 35.72,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0013",
+    "course_code": "CS-201",
+    "final_grade": 73.55,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0014",
+    "course_code": "CS-201",
+    "final_grade": 73.94,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0015",
+    "course_code": "CS-201",
+    "final_grade": 50.61,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0016",
+    "course_code": "CS-201",
+    "final_grade": 29.04,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0017",
+    "course_code": "CS-201",
+    "final_grade": 53.1,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0018",
+    "course_code": "CS-201",
+    "final_grade": 52.35,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0019",
+    "course_code": "CS-201",
+    "final_grade": 48.64,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0020",
+    "course_code": "CS-201",
+    "final_grade": 68.45,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0021",
+    "course_code": "CS-201",
+    "final_grade": 49.23,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0022",
+    "course_code": "CS-201",
+    "final_grade": 52.74,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0023",
+    "course_code": "CS-201",
+    "final_grade": 55.52,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0024",
+    "course_code": "CS-201",
+    "final_grade": 76.93,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0025",
+    "course_code": "CS-201",
+    "final_grade": 41.92,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0026",
+    "course_code": "CS-201",
+    "final_grade": 53.93,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0027",
+    "course_code": "CS-201",
+    "final_grade": 72.75,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0028",
+    "course_code": "CS-201",
+    "final_grade": 77.24,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0029",
+    "course_code": "CS-201",
+    "final_grade": 42.42,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0030",
+    "course_code": "CS-201",
+    "final_grade": 48.74,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0031",
+    "course_code": "CS-201",
+    "final_grade": 32.19,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0032",
+    "course_code": "CS-201",
+    "final_grade": 47.11,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0033",
+    "course_code": "CS-201",
+    "final_grade": 25.27,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0034",
+    "course_code": "CS-201",
+    "final_grade": 49.28,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0035",
+    "course_code": "CS-201",
+    "final_grade": 23.97,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0036",
+    "course_code": "CS-201",
+    "final_grade": 45.53,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0037",
+    "course_code": "CS-201",
+    "final_grade": 44.99,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0038",
+    "course_code": "CS-201",
+    "final_grade": 43.74,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0039",
+    "course_code": "CS-201",
+    "final_grade": 60.11,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0040",
+    "course_code": "CS-201",
+    "final_grade": 50.81,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0041",
+    "course_code": "CS-201",
+    "final_grade": 50.38,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0042",
+    "course_code": "CS-201",
+    "final_grade": 71.15,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0043",
+    "course_code": "CS-201",
+    "final_grade": 57.14,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0044",
+    "course_code": "CS-201",
+    "final_grade": 55.2,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0045",
+    "course_code": "CS-201",
+    "final_grade": 70.01,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0046",
+    "course_code": "CS-201",
+    "final_grade": 58.62,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0047",
+    "course_code": "CS-201",
+    "final_grade": 71.29,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0048",
+    "course_code": "CS-201",
+    "final_grade": 50.74,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0049",
+    "course_code": "CS-201",
+    "final_grade": 46.31,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0050",
+    "course_code": "CS-201",
+    "final_grade": 21.92,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0051",
+    "course_code": "CS-201",
+    "final_grade": 31.7,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0052",
+    "course_code": "CS-201",
+    "final_grade": 60.22,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0053",
+    "course_code": "CS-201",
+    "final_grade": 57.69,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0054",
+    "course_code": "CS-201",
+    "final_grade": 44.55,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0055",
+    "course_code": "CS-201",
+    "final_grade": 53.06,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0056",
+    "course_code": "CS-201",
+    "final_grade": 55.35,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0057",
+    "course_code": "CS-201",
+    "final_grade": 75.87,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0058",
+    "course_code": "CS-201",
+    "final_grade": 44.88,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0059",
+    "course_code": "CS-201",
+    "final_grade": 72.74,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0060",
+    "course_code": "CS-201",
+    "final_grade": 14.42,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0061",
+    "course_code": "CS-201",
+    "final_grade": 40.1,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0062",
+    "course_code": "CS-201",
+    "final_grade": 55.35,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0063",
+    "course_code": "CS-201",
+    "final_grade": 52.41,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0064",
+    "course_code": "CS-201",
+    "final_grade": 43.5,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0065",
+    "course_code": "CS-201",
+    "final_grade": 48.46,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0066",
+    "course_code": "CS-201",
+    "final_grade": 39.29,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0067",
+    "course_code": "CS-201",
+    "final_grade": 60.59,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0068",
+    "course_code": "CS-201",
+    "final_grade": 70.77,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0069",
+    "course_code": "CS-201",
+    "final_grade": 56.09,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0070",
+    "course_code": "CS-201",
+    "final_grade": 54.28,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0071",
+    "course_code": "CS-201",
+    "final_grade": 50.34,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0072",
+    "course_code": "CS-201",
+    "final_grade": 46.02,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0073",
+    "course_code": "CS-201",
+    "final_grade": 46.91,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0074",
+    "course_code": "CS-201",
+    "final_grade": 56.98,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0075",
+    "course_code": "CS-201",
+    "final_grade": 51.04,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0076",
+    "course_code": "CS-201",
+    "final_grade": 23.54,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0077",
+    "course_code": "CS-201",
+    "final_grade": 40.96,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0078",
+    "course_code": "CS-201",
+    "final_grade": 26.12,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0079",
+    "course_code": "CS-201",
+    "final_grade": 49.43,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0080",
+    "course_code": "CS-201",
+    "final_grade": 54.83,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0081",
+    "course_code": "CS-201",
+    "final_grade": 47.98,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0082",
+    "course_code": "CS-201",
+    "final_grade": 51.14,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0083",
+    "course_code": "CS-201",
+    "final_grade": 50.42,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0084",
+    "course_code": "CS-201",
+    "final_grade": 43.22,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0085",
+    "course_code": "CS-201",
+    "final_grade": 31.42,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0086",
+    "course_code": "CS-201",
+    "final_grade": 59.47,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0087",
+    "course_code": "CS-201",
+    "final_grade": 46.98,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0088",
+    "course_code": "CS-201",
+    "final_grade": 22.38,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0089",
+    "course_code": "CS-201",
+    "final_grade": 75.96,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0090",
+    "course_code": "CS-201",
+    "final_grade": 70.36,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0091",
+    "course_code": "CS-201",
+    "final_grade": 75.49,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0092",
+    "course_code": "CS-201",
+    "final_grade": 54.87,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0093",
+    "course_code": "CS-201",
+    "final_grade": 42.45,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0094",
+    "course_code": "CS-201",
+    "final_grade": 16.44,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0095",
+    "course_code": "CS-201",
+    "final_grade": 78.5,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0096",
+    "course_code": "CS-201",
+    "final_grade": 27.41,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0097",
+    "course_code": "CS-201",
+    "final_grade": 39.71,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0098",
+    "course_code": "CS-201",
+    "final_grade": 20.94,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0099",
+    "course_code": "CS-201",
+    "final_grade": 40.45,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0100",
+    "course_code": "CS-201",
+    "final_grade": 46.45,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0101",
+    "course_code": "CS-201",
+    "final_grade": 82.89,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0102",
+    "course_code": "CS-201",
+    "final_grade": 56.09,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0103",
+    "course_code": "CS-201",
+    "final_grade": 52.51,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0104",
+    "course_code": "CS-201",
+    "final_grade": 22.53,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0105",
+    "course_code": "CS-201",
+    "final_grade": 59.53,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0106",
+    "course_code": "CS-201",
+    "final_grade": 48.19,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0107",
+    "course_code": "CS-201",
+    "final_grade": 72.79,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0108",
+    "course_code": "CS-201",
+    "final_grade": 23.84,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0109",
+    "course_code": "CS-201",
+    "final_grade": 31.02,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0110",
+    "course_code": "CS-201",
+    "final_grade": 50.57,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0111",
+    "course_code": "CS-201",
+    "final_grade": 56.19,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0112",
+    "course_code": "CS-201",
+    "final_grade": 57.56,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0113",
+    "course_code": "CS-201",
+    "final_grade": 20.68,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0114",
+    "course_code": "CS-201",
+    "final_grade": 73.96,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0115",
+    "course_code": "CS-201",
+    "final_grade": 51.73,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0116",
+    "course_code": "CS-201",
+    "final_grade": 46.71,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0117",
+    "course_code": "CS-201",
+    "final_grade": 56.07,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0118",
+    "course_code": "CS-201",
+    "final_grade": 45.95,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0119",
+    "course_code": "CS-201",
+    "final_grade": 53.37,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0120",
+    "course_code": "CS-201",
+    "final_grade": 76.66,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0121",
+    "course_code": "CS-201",
+    "final_grade": 42.5,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0122",
+    "course_code": "CS-201",
+    "final_grade": 23,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0123",
+    "course_code": "CS-201",
+    "final_grade": 41.51,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0124",
+    "course_code": "CS-201",
+    "final_grade": 27.25,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0125",
+    "course_code": "CS-201",
+    "final_grade": 72.57,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0126",
+    "course_code": "CS-201",
+    "final_grade": 46.14,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0127",
+    "course_code": "CS-201",
+    "final_grade": 72.58,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0128",
+    "course_code": "CS-201",
+    "final_grade": 42,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0129",
+    "course_code": "CS-201",
+    "final_grade": 46.96,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0130",
+    "course_code": "CS-201",
+    "final_grade": 42.86,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0131",
+    "course_code": "CS-201",
+    "final_grade": 55.3,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0132",
+    "course_code": "CS-201",
+    "final_grade": 71.3,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0133",
+    "course_code": "CS-201",
+    "final_grade": 33.55,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0134",
+    "course_code": "CS-201",
+    "final_grade": 44.24,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0135",
+    "course_code": "CS-201",
+    "final_grade": 78.81,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0136",
+    "course_code": "CS-201",
+    "final_grade": 24.39,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0137",
+    "course_code": "CS-201",
+    "final_grade": 68.43,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0138",
+    "course_code": "CS-201",
+    "final_grade": 55.65,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0139",
+    "course_code": "CS-201",
+    "final_grade": 46.11,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0140",
+    "course_code": "CS-201",
+    "final_grade": 78.2,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0141",
+    "course_code": "CS-201",
+    "final_grade": 20.86,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0142",
+    "course_code": "CS-201",
+    "final_grade": 17.79,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0143",
+    "course_code": "CS-201",
+    "final_grade": 57.36,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0144",
+    "course_code": "CS-201",
+    "final_grade": 51.91,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0145",
+    "course_code": "CS-201",
+    "final_grade": 23.74,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0146",
+    "course_code": "CS-201",
+    "final_grade": 63.92,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0147",
+    "course_code": "CS-201",
+    "final_grade": 16.74,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0148",
+    "course_code": "CS-201",
+    "final_grade": 54.82,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0149",
+    "course_code": "CS-201",
+    "final_grade": 58.11,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0150",
+    "course_code": "CS-201",
+    "final_grade": 64.36,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0151",
+    "course_code": "CS-201",
+    "final_grade": 42.78,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0152",
+    "course_code": "CS-201",
+    "final_grade": 53.62,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0153",
+    "course_code": "CS-201",
+    "final_grade": 21.38,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0154",
+    "course_code": "CS-201",
+    "final_grade": 17.26,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0155",
+    "course_code": "CS-201",
+    "final_grade": 77.21,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0156",
+    "course_code": "CS-201",
+    "final_grade": 53.21,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0157",
+    "course_code": "CS-201",
+    "final_grade": 52.55,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0158",
+    "course_code": "CS-201",
+    "final_grade": 49.74,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0159",
+    "course_code": "CS-201",
+    "final_grade": 55.05,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0160",
+    "course_code": "CS-201",
+    "final_grade": 48.76,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0161",
+    "course_code": "CS-201",
+    "final_grade": 74.91,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0162",
+    "course_code": "CS-201",
+    "final_grade": 44.78,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0163",
+    "course_code": "CS-201",
+    "final_grade": 61.12,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0164",
+    "course_code": "CS-201",
+    "final_grade": 29.83,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0165",
+    "course_code": "CS-201",
+    "final_grade": 58.29,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0166",
+    "course_code": "CS-201",
+    "final_grade": 75.15,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0167",
+    "course_code": "CS-201",
+    "final_grade": 55.58,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0168",
+    "course_code": "CS-201",
+    "final_grade": 53.21,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0169",
+    "course_code": "CS-201",
+    "final_grade": 62.34,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0170",
+    "course_code": "CS-201",
+    "final_grade": 83.76,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0171",
+    "course_code": "CS-201",
+    "final_grade": 43.42,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0172",
+    "course_code": "CS-201",
+    "final_grade": 55.12,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0173",
+    "course_code": "CS-201",
+    "final_grade": 15.69,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0174",
+    "course_code": "CS-201",
+    "final_grade": 43.79,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0175",
+    "course_code": "CS-201",
+    "final_grade": 61.66,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0176",
+    "course_code": "CS-201",
+    "final_grade": 71.84,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0177",
+    "course_code": "CS-201",
+    "final_grade": 74.54,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0178",
+    "course_code": "CS-201",
+    "final_grade": 24.06,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0179",
+    "course_code": "CS-201",
+    "final_grade": 22.02,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0180",
+    "course_code": "CS-201",
+    "final_grade": 24.59,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0181",
+    "course_code": "CS-201",
+    "final_grade": 51.6,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0182",
+    "course_code": "CS-201",
+    "final_grade": 48.32,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0183",
+    "course_code": "CS-201",
+    "final_grade": 49.14,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0184",
+    "course_code": "CS-201",
+    "final_grade": 66.54,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0185",
+    "course_code": "CS-201",
+    "final_grade": 11.92,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0186",
+    "course_code": "CS-201",
+    "final_grade": 52.07,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0187",
+    "course_code": "CS-201",
+    "final_grade": 31.35,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0188",
+    "course_code": "CS-201",
+    "final_grade": 57.42,
+    "letter": "C",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0189",
+    "course_code": "CS-201",
+    "final_grade": 74.08,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0190",
+    "course_code": "CS-201",
+    "final_grade": 20.3,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0191",
+    "course_code": "CS-201",
+    "final_grade": 29.01,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0192",
+    "course_code": "CS-201",
+    "final_grade": 54.97,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0193",
+    "course_code": "CS-201",
+    "final_grade": 53.58,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0194",
+    "course_code": "CS-201",
+    "final_grade": 46.96,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0195",
+    "course_code": "CS-201",
+    "final_grade": 22.61,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0196",
+    "course_code": "CS-201",
+    "final_grade": 33.11,
+    "letter": "F",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0197",
+    "course_code": "CS-201",
+    "final_grade": 50.37,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0198",
+    "course_code": "CS-201",
+    "final_grade": 75.57,
+    "letter": "B",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0199",
+    "course_code": "CS-201",
+    "final_grade": 46.16,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  },
+  {
+    "student_id": "STU-0200",
+    "course_code": "CS-201",
+    "final_grade": 47.07,
+    "letter": "D",
+    "recorded_at": "2026-04-22T09:00:00.000Z"
+  }
+]

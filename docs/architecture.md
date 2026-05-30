@@ -279,7 +279,7 @@ carries a stamp of which data origin produced it.
                                      ▼
                   ┌──────────────────────────────────────────┐
                   │      src/server/dataset-mode/            │
-                  │  store.ts   — JSON persistence (atomic-ish)│
+                  │  store.ts   — AppSetting row (Prisma)      │
                   │  orchestrator — joins state + Prisma probes│
                   └──┬───────────────────┬───────────────────┘
                      │                   │
@@ -295,12 +295,15 @@ page header    switcher    <DatasetModeSwitcher>     active mode
 Key invariants:
 
 - **Switching is non-destructive.** Updating the active mode only
-  rewrites `data/processed/dataset-mode.json`. The DB rows do not
-  change. `npm run reset:demo` (Phase 9) is the destructive escape
-  hatch.
-- **JSON file, no Prisma migration.** Keeps Phase 10 fully additive —
-  zero schema changes, no migration step.
-- **Safe-by-default fallback.** Any I/O / parse / validation failure
+  rewrites a single `AppSetting` row (Phase 12B; was a JSON file
+  under `data/processed/` in Phase 10). The application DB rows do
+  not change. `npm run reset:demo` (Phase 9) is the destructive
+  escape hatch.
+- **AppSetting row, no FS writes at runtime.** Phase 12B moved the
+  state from a local file into the DB so the active mode survives
+  on a serverless / read-only filesystem (Vercel). The JSON shape
+  is unchanged — just the carrier.
+- **Safe-by-default fallback.** Any DB / parse / validation failure
   yields the default state (`activeMode: "synthetic"`). `readState`
   never throws.
 - **Single source of truth.** Per-mode metadata lives in

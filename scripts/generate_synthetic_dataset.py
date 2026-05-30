@@ -43,8 +43,12 @@ from typing import Iterable
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_OUTPUT_PATH = PROJECT_ROOT / "data" / "raw" / "sample_lms_data.csv"
 
-DEFAULT_STUDENTS = 250
-DEFAULT_WEEKS = 14
+# Phase 12B: shrunk from 250×14 → 200×12 so the generated CSV stays under
+# Vercel Hobby's 4.5 MB server-action body limit (the /upload endpoint
+# round-trips the same CSV format). Local dev can still override via
+# `npm run data:generate -- --students N --weeks W`.
+DEFAULT_STUDENTS = 200
+DEFAULT_WEEKS = 12
 DEFAULT_SEED = 42
 
 COHORT = "2026-spring"

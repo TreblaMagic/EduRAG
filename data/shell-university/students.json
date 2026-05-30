@@ -1,0 +1,1802 @@
+[
+  {
+    "student_id": "STU-0001",
+    "given_name": "Quinn",
+    "family_name": "Tanaka",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.97,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0002",
+    "given_name": "Avery",
+    "family_name": "Nguyen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.93,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0003",
+    "given_name": "Morgan",
+    "family_name": "Silva",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.35,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0004",
+    "given_name": "Drew",
+    "family_name": "Garcia",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.67,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0005",
+    "given_name": "Jamie",
+    "family_name": "Müller",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.49,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0006",
+    "given_name": "Drew",
+    "family_name": "Andersen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.21,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0007",
+    "given_name": "Alex",
+    "family_name": "Kim",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.68,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0008",
+    "given_name": "Alex",
+    "family_name": "Okafor",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.06,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0009",
+    "given_name": "Morgan",
+    "family_name": "Doe",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.99,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0010",
+    "given_name": "Jamie",
+    "family_name": "Kim",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.99,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0011",
+    "given_name": "Jordan",
+    "family_name": "Khan",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.77,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0012",
+    "given_name": "Robin",
+    "family_name": "Müller",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.52,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0013",
+    "given_name": "Alex",
+    "family_name": "Doe",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.46,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0014",
+    "given_name": "Cameron",
+    "family_name": "Garcia",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.42,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0015",
+    "given_name": "Taylor",
+    "family_name": "Müller",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.96,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0016",
+    "given_name": "Robin",
+    "family_name": "Kim",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.79,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0017",
+    "given_name": "Morgan",
+    "family_name": "Müller",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.06,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0018",
+    "given_name": "Quinn",
+    "family_name": "Andersen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.72,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0019",
+    "given_name": "Sage",
+    "family_name": "Patel",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.39,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0020",
+    "given_name": "Riley",
+    "family_name": "Hassan",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.3,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0021",
+    "given_name": "Sam",
+    "family_name": "Doe",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.36,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0022",
+    "given_name": "Drew",
+    "family_name": "Silva",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.58,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0023",
+    "given_name": "Sam",
+    "family_name": "Andersen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.04,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0024",
+    "given_name": "Morgan",
+    "family_name": "Andersen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.75,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0025",
+    "given_name": "Drew",
+    "family_name": "Khan",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.27,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0026",
+    "given_name": "Reese",
+    "family_name": "Okafor",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.08,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0027",
+    "given_name": "Riley",
+    "family_name": "Okafor",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.5,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0028",
+    "given_name": "Cameron",
+    "family_name": "Müller",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.85,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0029",
+    "given_name": "Morgan",
+    "family_name": "Tanaka",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.39,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0030",
+    "given_name": "Avery",
+    "family_name": "Hassan",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.96,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0031",
+    "given_name": "Riley",
+    "family_name": "Okafor",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.3,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0032",
+    "given_name": "Sam",
+    "family_name": "Andersen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.19,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0033",
+    "given_name": "Jamie",
+    "family_name": "Singh",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.27,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0034",
+    "given_name": "Drew",
+    "family_name": "Khan",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.01,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0035",
+    "given_name": "Reese",
+    "family_name": "Nguyen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.81,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0036",
+    "given_name": "Avery",
+    "family_name": "Garcia",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.12,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0037",
+    "given_name": "Jordan",
+    "family_name": "Silva",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.27,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0038",
+    "given_name": "Taylor",
+    "family_name": "Silva",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.25,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0039",
+    "given_name": "Morgan",
+    "family_name": "Chen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.91,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0040",
+    "given_name": "Sam",
+    "family_name": "Khan",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.62,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0041",
+    "given_name": "Alex",
+    "family_name": "Chen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.42,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0042",
+    "given_name": "Sage",
+    "family_name": "Singh",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.58,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0043",
+    "given_name": "Quinn",
+    "family_name": "Kim",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.02,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0044",
+    "given_name": "Alex",
+    "family_name": "Andersen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.43,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0045",
+    "given_name": "Morgan",
+    "family_name": "Müller",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.2,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0046",
+    "given_name": "Alex",
+    "family_name": "Garcia",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.22,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0047",
+    "given_name": "Cameron",
+    "family_name": "Hassan",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.24,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0048",
+    "given_name": "Jordan",
+    "family_name": "Okafor",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.9,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0049",
+    "given_name": "Casey",
+    "family_name": "Tanaka",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.67,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0050",
+    "given_name": "Avery",
+    "family_name": "Rossi",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.89,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0051",
+    "given_name": "Sage",
+    "family_name": "Müller",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.91,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0052",
+    "given_name": "Quinn",
+    "family_name": "Okafor",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.25,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0053",
+    "given_name": "Taylor",
+    "family_name": "Müller",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.57,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0054",
+    "given_name": "Morgan",
+    "family_name": "Andersen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.75,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0055",
+    "given_name": "Jordan",
+    "family_name": "Andersen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0056",
+    "given_name": "Sam",
+    "family_name": "Müller",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0057",
+    "given_name": "Cameron",
+    "family_name": "Garcia",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.07,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0058",
+    "given_name": "Casey",
+    "family_name": "Andersen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.21,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0059",
+    "given_name": "Robin",
+    "family_name": "Tanaka",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.27,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0060",
+    "given_name": "Sage",
+    "family_name": "Kim",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.71,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0061",
+    "given_name": "Sage",
+    "family_name": "Tanaka",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.26,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0062",
+    "given_name": "Quinn",
+    "family_name": "Khan",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.88,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0063",
+    "given_name": "Casey",
+    "family_name": "Okafor",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.37,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0064",
+    "given_name": "Drew",
+    "family_name": "Khan",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.16,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0065",
+    "given_name": "Jamie",
+    "family_name": "Doe",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.2,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0066",
+    "given_name": "Jordan",
+    "family_name": "Kim",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.04,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0067",
+    "given_name": "Jamie",
+    "family_name": "Hassan",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.11,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0068",
+    "given_name": "Quinn",
+    "family_name": "Khan",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.99,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0069",
+    "given_name": "Cameron",
+    "family_name": "Rossi",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.15,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0070",
+    "given_name": "Sage",
+    "family_name": "Andersen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.51,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0071",
+    "given_name": "Reese",
+    "family_name": "Silva",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.32,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0072",
+    "given_name": "Robin",
+    "family_name": "Nguyen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.56,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0073",
+    "given_name": "Alex",
+    "family_name": "Patel",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0074",
+    "given_name": "Avery",
+    "family_name": "Hassan",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.44,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0075",
+    "given_name": "Riley",
+    "family_name": "Andersen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.13,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0076",
+    "given_name": "Morgan",
+    "family_name": "Nguyen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.65,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0077",
+    "given_name": "Morgan",
+    "family_name": "Tanaka",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.33,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0078",
+    "given_name": "Avery",
+    "family_name": "Chen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.22,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0079",
+    "given_name": "Jordan",
+    "family_name": "Silva",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.77,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0080",
+    "given_name": "Riley",
+    "family_name": "Kim",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.1,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0081",
+    "given_name": "Riley",
+    "family_name": "Müller",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.72,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0082",
+    "given_name": "Jordan",
+    "family_name": "Kim",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.7,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0083",
+    "given_name": "Drew",
+    "family_name": "Okafor",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.63,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0084",
+    "given_name": "Riley",
+    "family_name": "Nguyen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.52,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0085",
+    "given_name": "Jordan",
+    "family_name": "Hassan",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.14,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0086",
+    "given_name": "Sage",
+    "family_name": "Tanaka",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.41,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0087",
+    "given_name": "Sam",
+    "family_name": "Khan",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.22,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0088",
+    "given_name": "Casey",
+    "family_name": "Garcia",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.62,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0089",
+    "given_name": "Cameron",
+    "family_name": "Patel",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.42,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0090",
+    "given_name": "Jamie",
+    "family_name": "Silva",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.28,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0091",
+    "given_name": "Cameron",
+    "family_name": "Khan",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0092",
+    "given_name": "Jordan",
+    "family_name": "Patel",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.77,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0093",
+    "given_name": "Alex",
+    "family_name": "Garcia",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.96,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0094",
+    "given_name": "Avery",
+    "family_name": "Okafor",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.84,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0095",
+    "given_name": "Alex",
+    "family_name": "Rossi",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.74,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0096",
+    "given_name": "Morgan",
+    "family_name": "Khan",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.22,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0097",
+    "given_name": "Taylor",
+    "family_name": "Hassan",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.71,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0098",
+    "given_name": "Taylor",
+    "family_name": "Kim",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.51,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0099",
+    "given_name": "Reese",
+    "family_name": "Andersen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.29,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0100",
+    "given_name": "Robin",
+    "family_name": "Müller",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.26,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0101",
+    "given_name": "Jamie",
+    "family_name": "Okafor",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.9,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0102",
+    "given_name": "Cameron",
+    "family_name": "Okafor",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.55,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0103",
+    "given_name": "Reese",
+    "family_name": "Chen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.83,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0104",
+    "given_name": "Quinn",
+    "family_name": "Andersen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.26,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0105",
+    "given_name": "Casey",
+    "family_name": "Singh",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.65,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0106",
+    "given_name": "Sage",
+    "family_name": "Tanaka",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.13,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0107",
+    "given_name": "Drew",
+    "family_name": "Khan",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.31,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0108",
+    "given_name": "Sage",
+    "family_name": "Andersen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.67,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0109",
+    "given_name": "Morgan",
+    "family_name": "Hassan",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.53,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0110",
+    "given_name": "Morgan",
+    "family_name": "Silva",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.23,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0111",
+    "given_name": "Jamie",
+    "family_name": "Andersen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.28,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0112",
+    "given_name": "Robin",
+    "family_name": "Singh",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.71,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0113",
+    "given_name": "Drew",
+    "family_name": "Patel",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.82,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0114",
+    "given_name": "Sage",
+    "family_name": "Andersen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.1,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0115",
+    "given_name": "Riley",
+    "family_name": "Silva",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.14,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0116",
+    "given_name": "Drew",
+    "family_name": "Doe",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.26,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0117",
+    "given_name": "Sam",
+    "family_name": "Patel",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.91,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0118",
+    "given_name": "Robin",
+    "family_name": "Khan",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.62,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0119",
+    "given_name": "Sam",
+    "family_name": "Doe",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.15,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0120",
+    "given_name": "Avery",
+    "family_name": "Müller",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.93,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0121",
+    "given_name": "Quinn",
+    "family_name": "Singh",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.24,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0122",
+    "given_name": "Casey",
+    "family_name": "Patel",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.77,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0123",
+    "given_name": "Taylor",
+    "family_name": "Kim",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.17,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0124",
+    "given_name": "Taylor",
+    "family_name": "Andersen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.65,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0125",
+    "given_name": "Drew",
+    "family_name": "Okafor",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.02,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0126",
+    "given_name": "Jamie",
+    "family_name": "Andersen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.24,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0127",
+    "given_name": "Sam",
+    "family_name": "Doe",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.33,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0128",
+    "given_name": "Casey",
+    "family_name": "Garcia",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.32,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0129",
+    "given_name": "Reese",
+    "family_name": "Okafor",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.16,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0130",
+    "given_name": "Casey",
+    "family_name": "Silva",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.24,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0131",
+    "given_name": "Jamie",
+    "family_name": "Chen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.31,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0132",
+    "given_name": "Taylor",
+    "family_name": "Chen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.27,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0133",
+    "given_name": "Jordan",
+    "family_name": "Patel",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.14,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0134",
+    "given_name": "Riley",
+    "family_name": "Singh",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.33,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0135",
+    "given_name": "Drew",
+    "family_name": "Hassan",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.87,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0136",
+    "given_name": "Jordan",
+    "family_name": "Okafor",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.62,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0137",
+    "given_name": "Taylor",
+    "family_name": "Chen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.22,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0138",
+    "given_name": "Jordan",
+    "family_name": "Silva",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.18,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0139",
+    "given_name": "Cameron",
+    "family_name": "Garcia",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.75,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0140",
+    "given_name": "Drew",
+    "family_name": "Chen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.31,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0141",
+    "given_name": "Reese",
+    "family_name": "Okafor",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.53,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0142",
+    "given_name": "Alex",
+    "family_name": "Müller",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.8,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0143",
+    "given_name": "Jamie",
+    "family_name": "Garcia",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.52,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0144",
+    "given_name": "Riley",
+    "family_name": "Nguyen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.43,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0145",
+    "given_name": "Drew",
+    "family_name": "Nguyen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.93,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0146",
+    "given_name": "Sam",
+    "family_name": "Nguyen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.36,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0147",
+    "given_name": "Taylor",
+    "family_name": "Kim",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.76,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0148",
+    "given_name": "Quinn",
+    "family_name": "Kim",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.28,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0149",
+    "given_name": "Jordan",
+    "family_name": "Hassan",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.14,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0150",
+    "given_name": "Casey",
+    "family_name": "Garcia",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.9,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0151",
+    "given_name": "Jamie",
+    "family_name": "Tanaka",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.38,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0152",
+    "given_name": "Taylor",
+    "family_name": "Kim",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.54,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0153",
+    "given_name": "Robin",
+    "family_name": "Rossi",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.72,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0154",
+    "given_name": "Taylor",
+    "family_name": "Kim",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.65,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0155",
+    "given_name": "Quinn",
+    "family_name": "Doe",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.97,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0156",
+    "given_name": "Jamie",
+    "family_name": "Silva",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.68,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0157",
+    "given_name": "Alex",
+    "family_name": "Okafor",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.46,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0158",
+    "given_name": "Drew",
+    "family_name": "Kim",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.27,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0159",
+    "given_name": "Riley",
+    "family_name": "Okafor",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.61,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0160",
+    "given_name": "Avery",
+    "family_name": "Doe",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.93,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0161",
+    "given_name": "Jordan",
+    "family_name": "Rossi",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.73,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0162",
+    "given_name": "Sage",
+    "family_name": "Müller",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.31,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0163",
+    "given_name": "Sage",
+    "family_name": "Tanaka",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.11,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0164",
+    "given_name": "Cameron",
+    "family_name": "Kim",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.81,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0165",
+    "given_name": "Drew",
+    "family_name": "Chen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.66,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0166",
+    "given_name": "Avery",
+    "family_name": "Okafor",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.58,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0167",
+    "given_name": "Robin",
+    "family_name": "Kim",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.75,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0168",
+    "given_name": "Sage",
+    "family_name": "Doe",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.71,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0169",
+    "given_name": "Drew",
+    "family_name": "Andersen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.5,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0170",
+    "given_name": "Quinn",
+    "family_name": "Khan",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.93,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0171",
+    "given_name": "Reese",
+    "family_name": "Hassan",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.85,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0172",
+    "given_name": "Robin",
+    "family_name": "Hassan",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.72,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0173",
+    "given_name": "Jordan",
+    "family_name": "Patel",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.46,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0174",
+    "given_name": "Alex",
+    "family_name": "Kim",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0175",
+    "given_name": "Avery",
+    "family_name": "Chen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.64,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0176",
+    "given_name": "Robin",
+    "family_name": "Tanaka",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.07,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0177",
+    "given_name": "Quinn",
+    "family_name": "Garcia",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.66,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0178",
+    "given_name": "Casey",
+    "family_name": "Andersen",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.93,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0179",
+    "given_name": "Jordan",
+    "family_name": "Garcia",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.91,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0180",
+    "given_name": "Casey",
+    "family_name": "Silva",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.6,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0181",
+    "given_name": "Riley",
+    "family_name": "Chen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.72,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0182",
+    "given_name": "Alex",
+    "family_name": "Andersen",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.3,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0183",
+    "given_name": "Taylor",
+    "family_name": "Okafor",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.57,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0184",
+    "given_name": "Drew",
+    "family_name": "Rossi",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.41,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0185",
+    "given_name": "Quinn",
+    "family_name": "Müller",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.02,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0186",
+    "given_name": "Drew",
+    "family_name": "Hassan",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.8,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0187",
+    "given_name": "Cameron",
+    "family_name": "Patel",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.35,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0188",
+    "given_name": "Jamie",
+    "family_name": "Tanaka",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.92,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0189",
+    "given_name": "Robin",
+    "family_name": "Rossi",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.94,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0190",
+    "given_name": "Jordan",
+    "family_name": "Hassan",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.38,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0191",
+    "given_name": "Avery",
+    "family_name": "Andersen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.67,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0192",
+    "given_name": "Cameron",
+    "family_name": "Silva",
+    "program": "BSc Information Systems",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.12,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0193",
+    "given_name": "Jamie",
+    "family_name": "Doe",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.8,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0194",
+    "given_name": "Sam",
+    "family_name": "Singh",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.86,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0195",
+    "given_name": "Alex",
+    "family_name": "Kim",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 1.5,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0196",
+    "given_name": "Jamie",
+    "family_name": "Silva",
+    "program": "BSc Computer Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.54,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0197",
+    "given_name": "Riley",
+    "family_name": "Khan",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.43,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0198",
+    "given_name": "Jordan",
+    "family_name": "Chen",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 3.58,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0199",
+    "given_name": "Alex",
+    "family_name": "Silva",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.99,
+    "enrollment_status": "active"
+  },
+  {
+    "student_id": "STU-0200",
+    "given_name": "Robin",
+    "family_name": "Okafor",
+    "program": "BSc Data Science",
+    "term": "2026-SPRING",
+    "prior_gpa": 2.76,
+    "enrollment_status": "active"
+  }
+]

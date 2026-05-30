@@ -42,10 +42,18 @@ prisma/*.db-journal
 # Data (keep folders, ignore contents)
 data/raw/*
 !data/raw/.gitkeep
+# Phase 12B: ship the bounded synthetic CSV so the Vercel build's
+# `prisma db seed` step has a deterministic source. Local devs can
+# still regenerate via `npm run data:generate`.
+!data/raw/sample_lms_data.csv
 data/processed/*
 !data/processed/.gitkeep
 data/shell-university/*
 !data/shell-university/.gitkeep
+# Phase 12B: commit the seeded Shell University JSON so the hosted
+# demo's mock LMS works against a sealed bundle (no FS writes at
+# runtime). Re-seed locally with `npm run shell:seed`.
+!data/shell-university/*.json
 
 # Logs
 *.log

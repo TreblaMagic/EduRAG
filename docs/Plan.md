@@ -23,8 +23,8 @@
 |  11   | Advisor Feedback / Intervention Tracking    | ✅ Complete    | 2026-05-28   |
 |  12   | GitHub + Vercel Deployment (Final Launch)   | 📝 Planned     | —            |
 |  12A  | GitHub readiness + CI + license             | ✅ Complete    | 2026-05-29   |
-|  12B  | Postgres / Vercel compatibility             | ⏳ Next        | —            |
-|  12C  | Vercel deployment + nightly reseed          | ⏸ Not started | —            |
+|  12B  | Postgres / Vercel compatibility             | ✅ Complete    | 2026-05-30   |
+|  12C  | Vercel deployment + nightly reseed          | ✅ Code complete | 2026-05-30 |
 |  12D  | Screenshots, README, video, CV, LinkedIn    | ⏸ Not started | —            |
 
 See `docs/logs/` for per-execution logs and `docs/features/` for per-feature specs.
@@ -656,35 +656,161 @@ git push -u origin main
 #   https://github.com/<user>/edurag/actions
 ```
 
-### Phase 12B — Postgres / Vercel compatibility (code changes only)
+### Phase 12B — Postgres / Vercel compatibility (code changes only)  ✅ **Complete (2026-05-30)**
 
-- [ ] `prisma/schema.prisma` → `provider = env("DATABASE_PROVIDER")`.
-- [ ] Add `AppSetting` singleton model.
-- [ ] Refactor `src/server/dataset-mode/store.ts` to read/write via Prisma instead of `data/processed/dataset-mode.json` (the only runtime FS write in the codebase).
-- [ ] Regenerate migrations against Postgres locally.
-- [ ] Add `prisma/seed.ts` (reuses Phase 9 `buildSetupSteps`).
-- [ ] Register `prisma.seed` in `package.json`.
-- [ ] Commit Shell University seed JSON (`!data/shell-university/*.json` exemption in `.gitignore`).
-- [ ] Shrink the synthetic CSV to ≤ 4 MB for Vercel Hobby compatibility.
-- [ ] Refactor `store.test.ts` from temp-file fixtures to mocked-Prisma fixtures.
-- [ ] Document both local dev paths (SQLite default + Postgres via the Phase 9 Docker stack) in the README.
+- [x] `prisma/schema.prisma` → `provider = env("DATABASE_PROVIDER")` (env-driven; provider chosen at `prisma generate` time).
+- [x] New `AppSetting` singleton model — keyed string `value` blob, one row per logical setting; first user is the active dataset-mode payload.
+- [x] Refactored `src/server/dataset-mode/store.ts` to read/write via Prisma `AppSetting` instead of `data/processed/dataset-mode.json` (the only runtime FS write in the codebase). `normaliseState()` stayed pure so the corruption-recovery branch is still unit-testable without a DB.
+- [x] Refactored `src/server/dataset-mode/orchestrator.ts` (now fully async — `readState` / `writeState` return Promises) and the `switchDatasetMode` server action to await the new orchestrator.
+- [x] Refactored `__tests__/store.test.ts` + `__tests__/orchestrator.test.ts` from temp-file fixtures to an in-memory `AppSettingClient` fake. Added a "broken-client" test to lock in the silent-fallback behaviour. **304/304** tests pass (one removed — `statePathFor` no longer exists).
+- [x] Added `prisma/seed.ts` — calls the pipeline TS functions directly (`ingestCsv → deriveAllSummaries → deriveCourseFeatures → runCausalEstimates → runSimulations → trainAndPredict → syncFromShellUniversity`). Idempotent: short-circuits when `Student.count() > 0`. Exports `runFreshSeed()` so the Phase 12C nightly-reseed route can call it after a wipe.
+- [x] Registered `"prisma": { "seed": "tsx prisma/seed.ts" }` in `package.json` + a convenience `npm run prisma:seed` script.
+- [x] `.gitignore` exemptions: `!data/raw/sample_lms_data.csv` + `!data/shell-university/*.json` so the Vercel build's seed step has a deterministic, in-bundle source.
+- [x] Shrunk synthetic-CSV defaults from **250 × 14** → **200 × 12** (Python generator) so the CSV stays comfortably under Vercel Hobby's 4.5 MB server-action body limit (the `/upload` round-trip uses the same shape). Shell University `lms-events.json` now writes compactly (no indent) since it's a per-row mirror that scales with the cohort × weeks; the small files stay pretty-printed for diff reviewability.
+- [x] `.env.example` — added `DATABASE_PROVIDER`, commented Postgres example with `DIRECT_URL`, `DEMO_MODE`, and `ENABLE_PYTHON_ENGINE`.
+- [x] README — flipped the phase chip to `12B postgres compat`, test count to **304**, and added a "Choosing a database provider" section covering both local paths.
+- [x] `docker-compose.yml` — added a `db` Postgres 16-alpine service (port 5432, `edurag/edurag/edurag`, named volume) so local devs can exercise the Postgres provider path with one command before pushing to Vercel.
+- [x] `docs/architecture.md` — updated the dataset-mode block to describe the AppSetting carrier (was JSON file).
+- [x] **304 / 304** tests pass · typecheck clean · `npm run build` succeeds with all 21 routes — only `/_not-found` static, same dynamic surface as Phase 12A.
 
-**Deliverable:** the same checkout runs against both providers; ready for Vercel to consume.
+**Deliverable (achieved):** the same checkout runs against both SQLite (default) and Postgres (Docker / Neon). The only runtime FS write is gone — the app is fully serverless-compatible. The seed script gives Vercel a one-shot pipeline to a populated DB without shelling out to Python or `npm run setup`.
 
-### Phase 12C — Vercel deployment + nightly reseed
+**What 12B deliberately did NOT touch:**
 
-- [ ] `src/lib/demo-mode.ts` — `isHostedDemo()` helper.
-- [ ] `<DemoModeBanner>` in `AppShell` when `DEMO_MODE=hosted`.
-- [ ] Upload row-cap guard in `src/server/upload/commit.ts` (hosted only).
-- [ ] `app/api/admin/reseed/route.ts` — POST gated by `CRON_SECRET` header.
-- [ ] `vercel.json` cron: `0 3 * * *` → `/api/admin/reseed`.
-- [ ] `app/robots.ts` — sensible defaults.
-- [ ] `.env.example` — every new var documented.
-- [ ] Create Neon project → copy pooler + direct URLs.
-- [ ] Create Vercel project → connect GitHub → paste env vars → first deploy.
-- [ ] Smoke-test live URL end-to-end + curl-test the reseed endpoint.
+- No `npm run setup` change — the Phase 9 bootstrap CLI still shells out to npm scripts (no risk to the existing two-command demo).
+- No new migration files (the agent does not run `prisma migrate dev` per `CLAUDE.md`). The schema change is the only new diff; the operator runs the migration step below.
+- No deploy work — that's 12C.
 
-**Deliverable:** live demo at `https://edurag.vercel.app` (or chosen subdomain) with all features working, nightly reseed active.
+**Operator's manual commands (Phase 12B):**
+
+```bash
+# 1. Regenerate the Prisma client for the new schema (env-driven provider
+#    + new AppSetting model). DATABASE_PROVIDER must be set first — the
+#    new schema reads it at `prisma generate` time.
+#    .env.example already ships with DATABASE_PROVIDER=sqlite as the default;
+#    `cp .env.example .env` if you haven't yet.
+npm run prisma:generate
+
+# 2. Apply the schema diff against the local SQLite DB. `migrate dev`
+#    synthesises the migration from the schema diff and writes it under
+#    prisma/migrations/. The only change is the new `AppSetting` table.
+npx prisma migrate dev --name phase12b_app_setting
+
+# 3. Regenerate the synthetic CSV at the new defaults (200 × 12) and
+#    re-seed Shell University so the file sizes match the .gitignore
+#    exemptions. Commit the resulting files.
+npm run data:generate
+npm run shell:seed
+git add data/raw/sample_lms_data.csv data/shell-university/*.json
+
+# 4. (Optional) Exercise the Postgres path before deploying.
+docker compose up -d db                       # starts Postgres on :5432
+# Override .env (or export inline):
+DATABASE_PROVIDER=postgresql \
+  DATABASE_URL="postgresql://edurag:edurag@localhost:5432/edurag" \
+  npm run prisma:generate
+DATABASE_PROVIDER=postgresql \
+  DATABASE_URL="postgresql://edurag:edurag@localhost:5432/edurag" \
+  npx prisma migrate dev --name phase12b_app_setting
+DATABASE_PROVIDER=postgresql \
+  DATABASE_URL="postgresql://edurag:edurag@localhost:5432/edurag" \
+  npx prisma db seed                          # runs the new prisma/seed.ts
+# Return to SQLite by restoring .env defaults and running prisma:generate again.
+
+# 5. (One-time) Verify both providers green:
+DATABASE_PROVIDER=sqlite npm test
+# Optional Postgres test pass (requires step 4):
+# DATABASE_PROVIDER=postgresql DATABASE_URL="postgresql://edurag:edurag@localhost:5432/edurag" npm test
+```
+
+> Per `CLAUDE.md`, the agent did not run `prisma migrate`, `prisma db seed`,
+> `npm install`, or `pip install` itself. The schema diff that the operator
+> migration above produces is the new `AppSetting` table only — no
+> destructive changes to existing rows.
+
+### Phase 12C — Vercel deployment + nightly reseed  ✅ **Code complete (2026-05-30)**
+
+- [x] `src/lib/demo-mode.ts` — `resolveDemoMode()` / `isHostedDemo()` helpers + `HOSTED_UPLOAD_ROW_CAP` constant (50,000). Accepts any `EnvLike` record so tests can pass `{}` without satisfying Next.js's augmented `ProcessEnv`.
+- [x] `<DemoModeBanner>` rendered above the dataset-mode chip in `AppShell` when `DEMO_MODE=hosted`. Returns `null` in local mode → zero render cost. Copy: *"Public demo · Data resets nightly at 03:00 UTC. Fully synthetic — no real student records."*
+- [x] Upload row-cap guard in `src/server/upload/commit.ts` — hosted only, early-returns a structured `failed(...)` result when row count exceeds 50,000. Local mode is unaffected. Test-injectable via `hostedDemoOverride` / `rowCapOverride`.
+- [x] `src/app/api/admin/reseed/route.ts` — POST endpoint. Auth: `Authorization: Bearer ${CRON_SECRET}` (Vercel cron native) or `x-cron-secret` (curl smoke-test convenience). Constant-time `crypto.timingSafeEqual` comparison. Returns 503 when `CRON_SECRET` is unset (opt-in route). `maxDuration = 60` to cover the full pipeline within the function ceiling.
+- [x] `wipeAllDomainTables(prisma)` (inlined in the reseed route) — wipes every domain table including `SyncLog` + `AppSetting` in dependency order, then calls `runFreshSeed()` from the new `prisma/seed-pipeline.ts` module.
+- [x] `prisma/seed.ts` split — pipeline body moved to `prisma/seed-pipeline.ts` so importers (the reseed route) can pull `runFreshSeed` without triggering the `npx prisma db seed` entry's top-level `main()`. Same idempotency guard (count > 0 → skip) preserved.
+- [x] `vercel.json` — single cron entry: `0 3 * * *` → `/api/admin/reseed`.
+- [x] `src/app/robots.ts` — allows `/`, `/about`, `/causal-graph`, `/comparison`; disallows every `/api/*`, `/upload`, `/datasets`, `/interventions`, `/integrations/*`, `/students/*`, `/what-if` so a crawler can't trigger DB mutations or hit per-student paths that aren't useful to index. Uses `NEXT_PUBLIC_APP_URL` (Vercel env) for the canonical host.
+- [x] `.env.example` — added `NEXT_PUBLIC_APP_URL` (defaults to `http://localhost:3000`) + commented `CRON_SECRET` line (intentionally unset locally so the reseed route returns 503).
+- [x] **Tests added (+9):** 6 for `demo-mode` (defaults, casing, whitespace tolerance, `isHostedDemo` agreement, `HOSTED_UPLOAD_ROW_CAP` sanity) + 3 for `commit.ts` row-cap (rejects above cap in hosted mode, passes through in hosted mode below cap, ignores cap entirely in local mode).
+- [x] **313 / 313** tests pass · typecheck clean · `npm run build` succeeds with **23 routes** registered — added `ƒ /api/admin/reseed` + `○ /robots.txt`. `/_not-found` and `/robots.txt` are the only static routes; everything else stays `ƒ Dynamic`.
+
+**Deliverable (code side, achieved):** every code change Vercel + the cron need is in place. The hosted-only safety rails, the destructive-but-gated reseed endpoint, and the crawler-friendly-but-safe robots.txt all build and pass tests against the local SQLite default. Remaining work is operator-side: create the Neon project, create the Vercel project, paste the env vars, trigger the first deploy, and curl-smoke-test the reseed.
+
+**What 12C deliberately did NOT touch:**
+
+- No change to the existing dataset-mode store, orchestrator, or banner — Phase 12B did that work.
+- No change to the Phase 9 bootstrap CLIs (`setup` / `demo` / `doctor` / `status` / `reset:demo`). Local devs see no behavioural delta.
+- No new runtime npm dependencies. `crypto.timingSafeEqual` is a Node built-in.
+- No copy / honesty-language edits anywhere outside the new banner string.
+
+**Operator's manual commands (Phase 12C):**
+
+```bash
+# 1. Generate the cron secret (32 random bytes, hex-encoded).
+#    Linux/macOS:
+openssl rand -hex 32
+#    Windows (PowerShell):
+[Convert]::ToHexString((New-Object byte[] 32 | ForEach-Object { Get-Random -Maximum 256 } | ForEach-Object { [byte]$_ }))
+
+# 2. Provision Neon (https://console.neon.tech).
+#    - Create project "edurag" → copy the *pooled* and *direct* connection strings.
+#    - The pooler URL goes into DATABASE_URL; the direct URL goes into DIRECT_URL.
+
+# 3. Provision Vercel (https://vercel.com/new).
+#    - Import the GitHub repository.
+#    - Build command:    prisma generate && prisma migrate deploy && prisma db seed && next build
+#    - Output directory: .next (default)
+#    - Install command:  npm install (default)
+#    - Node version:     20
+#    - Environment variables (paste under "Environment Variables", all environments):
+#        DATABASE_PROVIDER     postgresql
+#        DATABASE_URL          postgresql://...@...neon.tech/edurag?sslmode=require&pgbouncer=true
+#        DIRECT_URL            postgresql://...@...neon.tech/edurag?sslmode=require
+#        DEMO_MODE             hosted
+#        NEXT_PUBLIC_APP_URL   https://<your-vercel-project>.vercel.app
+#        CRON_SECRET           <paste the openssl output from step 1>
+#        ENABLE_PYTHON_ENGINE  false
+
+# 4. Trigger the first deploy by pushing to main (or use the "Deploy" button).
+#    Watch the build logs — expected sequence:
+#      prisma generate → prisma migrate deploy → prisma db seed → next build
+#    First seed run takes ~30 s (ingest + derive + estimates + simulations + predict + shell sync).
+
+# 5. Smoke-test the live site end-to-end:
+#    /                                              → cohort overview loads, banner visible
+#    /students/STU-0042                             → prediction vs intervention panel renders
+#    /causal-graph?view=compare                     → manual vs discovered DAG, both render
+#    /comparison                                    → cohort table renders
+#    /what-if                                       → slider submits successfully
+#    /upload                                        → preview a small CSV (well under cap)
+#    /datasets                                      → switch mode → reload → switch persisted
+#    /interventions                                 → cohort feed renders
+
+# 6. Curl-smoke-test the reseed endpoint (replace placeholders):
+SECRET="<your CRON_SECRET>"
+URL="https://<your-vercel-project>.vercel.app/api/admin/reseed"
+curl -X POST -H "Authorization: Bearer $SECRET" "$URL"
+#   Expect: HTTP 200, JSON body { ok: true, startedAt, finishedAt, durationMs }
+#   Wrong / missing secret: HTTP 401
+#   Missing CRON_SECRET env var: HTTP 503
+
+# 7. Confirm the cron is scheduled in Vercel's dashboard (Settings → Cron Jobs):
+#    Should show one entry: 0 3 * * *  → /api/admin/reseed
+#    Next firing displayed in the operator's local timezone.
+```
+
+> Per `CLAUDE.md`, the agent did not create the Neon project, the Vercel
+> project, paste the env vars, or fire the curl. Those are the
+> operator-only steps above. The agent's deliverable is the code +
+> documentation + green local build.
 
 ### Phase 12D — Screenshots, README, video, CV, LinkedIn (launch lap)
 

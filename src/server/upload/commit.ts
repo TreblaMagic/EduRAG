@@ -15,6 +15,7 @@
 
 import type { PrismaClient } from "@prisma/client";
 
+import { HOSTED_UPLOAD_ROW_CAP, isHostedDemo } from "@/lib/demo-mode";
 import { log } from "@/lib/logger";
 import { deriveCourseFeatures } from "@/server/causal/derive-features";
 import { runCausalEstimates } from "@/server/causal/run-estimates";
@@ -40,6 +41,10 @@ interface CommitInputs {
   rows: ValidatedRow[];
   errors: ValidationError[];
   options: CommitOptions;
+  /** Phase 12C: override the hosted-demo gate for tests. */
+  hostedDemoOverride?: boolean;
+  /** Phase 12C: override the hosted row cap for tests. */
+  rowCapOverride?: number;
 }
 
 const SOURCE = "uploaded";
@@ -50,6 +55,23 @@ export async function commitUploadedRows(
 ): Promise<CommitResult> {
   const startedAtMs = Date.now();
   const { filename, byteSize, rows, errors, options } = inputs;
+
+  // Phase 12C: hosted-only row cap. Prevents a single upload from filling
+  // the free-tier Postgres DB before the nightly reseed gets to it.
+  // Local dev is unaffected — `isHostedDemo()` returns false unless
+  // `DEMO_MODE=hosted` is explicitly set.
+  const hostedDemo = inputs.hostedDemoOverride ?? isHostedDemo();
+  const rowCap = inputs.rowCapOverride ?? HOSTED_UPLOAD_ROW_CAP;
+  if (hostedDemo && rows.length > rowCap) {
+    return failed(
+      filename,
+      byteSize,
+      options,
+      errors,
+      `Public-demo row cap exceeded: ${rows.length.toLocaleString()} rows received, ` +
+        `${rowCap.toLocaleString()} allowed. Run EduRAG locally for unbounded uploads.`,
+    );
+  }
 
   const preview = buildPreviewResult({ filename, byteSize, rows, errors });
   const warnings: string[] = [];

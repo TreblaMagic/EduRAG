@@ -49,7 +49,7 @@ export async function switchDatasetMode(
       ? reason.trim().slice(0, 200)
       : null;
 
-  const next = setActiveDatasetMode(rawMode, reasonStr);
+  const next = await setActiveDatasetMode(rawMode, reasonStr);
 
   // Revalidate the routes that visibly depend on the active mode so the
   // banner + headline copy flip without a hard reload.

@@ -1,23 +1,27 @@
 /**
  * Phase 10 — persistence layer for the active dataset mode.
  *
- * Storage choice: a single JSON file at
- * `data/processed/dataset-mode.json`. Rationale:
+ * Storage choice (Phase 12B):
  *
- *   - No new Prisma table — Phase 10 ships zero migrations, matching
- *     the `CLAUDE.md` workflow rule.
- *   - Survives app restarts; lives outside `prisma/dev.db` so a
- *     `reset:demo` doesn't accidentally wipe the user's mode choice.
- *   - Tiny enough that we can parse + validate it on every read.
+ *   - Persisted as a single row in the `AppSetting` table
+ *     (`key = "dataset-mode"`). Replaces the Phase 10 JSON file at
+ *     `data/processed/dataset-mode.json` so the active mode survives on
+ *     a read-only / serverless filesystem (Vercel).
+ *   - The stored `value` is the JSON-encoded `DatasetModeStateFile`
+ *     payload — same shape as the old file, so a one-line backfill is
+ *     all that is needed to move existing local state into the DB.
  *
- * Safe fallback: any I/O error or malformed JSON yields the default
- * state ({@link DEFAULT_DATASET_STATE}). The caller never receives a
- * thrown error — invariant: `readState()` always returns a usable
- * state object.
+ * Invariants preserved from Phase 10:
+ *
+ *   - `readState()` never throws. Missing row / malformed JSON / invalid
+ *     mode all fall through to {@link DEFAULT_DATASET_STATE}.
+ *   - `normaliseState()` is pure (no I/O) so tests can exercise the
+ *     corruption-recovery path without touching the DB.
+ *
+ * Tests inject their own Prisma double via the `prisma` option; the
+ * production callers omit it and pick up the shared client from
+ * `@/lib/db`.
  */
-
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, resolve } from "node:path";
 
 import {
   DEFAULT_DATASET_STATE,
@@ -25,28 +29,41 @@ import {
   type DatasetMode,
   type DatasetModeStateFile,
 } from "@/features/dataset-modes";
+import { prisma as defaultPrisma } from "@/lib/db";
 
-const STATE_FILENAME = "dataset-mode.json";
+const APP_SETTING_KEY = "dataset-mode";
 
-export interface StoreOptions {
-  /** Absolute path to the state file. Defaults to `<cwd>/data/processed/dataset-mode.json`. */
-  path?: string;
+/**
+ * Minimal slice of `PrismaClient` the store needs. Defining the shape
+ * here keeps the tests free of the generated Prisma type surface and
+ * makes it obvious which fields the store actually touches.
+ */
+export interface AppSettingClient {
+  appSetting: {
+    findUnique(args: { where: { key: string } }): Promise<{ key: string; value: string } | null>;
+    upsert(args: {
+      where: { key: string };
+      create: { key: string; value: string };
+      update: { value: string };
+    }): Promise<unknown>;
+  };
 }
 
-export function statePathFor(options: StoreOptions = {}): string {
-  return options.path ?? resolve(process.cwd(), "data", "processed", STATE_FILENAME);
+export interface StoreOptions {
+  /** Inject a Prisma-shaped client (used by tests + the seed script). */
+  prisma?: AppSettingClient;
 }
 
 /**
  * Read the persisted state. Falls back to the default on any failure
- * (missing file, malformed JSON, invalid mode). Never throws.
+ * (missing row, malformed JSON, invalid mode). Never throws.
  */
-export function readState(options: StoreOptions = {}): DatasetModeStateFile {
-  const path = statePathFor(options);
-  if (!existsSync(path)) return { ...DEFAULT_DATASET_STATE };
+export async function readState(options: StoreOptions = {}): Promise<DatasetModeStateFile> {
+  const client = options.prisma ?? (defaultPrisma as unknown as AppSettingClient);
   try {
-    const raw = readFileSync(path, "utf8");
-    const parsed = JSON.parse(raw) as Partial<DatasetModeStateFile>;
+    const row = await client.appSetting.findUnique({ where: { key: APP_SETTING_KEY } });
+    if (!row) return { ...DEFAULT_DATASET_STATE };
+    const parsed = JSON.parse(row.value) as Partial<DatasetModeStateFile>;
     return normaliseState(parsed);
   } catch {
     return { ...DEFAULT_DATASET_STATE };
@@ -54,25 +71,27 @@ export function readState(options: StoreOptions = {}): DatasetModeStateFile {
 }
 
 /**
- * Atomically (well, as atomic as fs.writeFileSync gets on a single
- * machine) persist the new state. Creates the parent directory if
- * missing.
+ * Persist the new state. Idempotent — re-running with the same payload
+ * simply rewrites the row.
  */
-export function writeState(
+export async function writeState(
   state: DatasetModeStateFile,
   options: StoreOptions = {},
-): void {
-  const path = statePathFor(options);
-  const dir = dirname(path);
-  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+): Promise<void> {
+  const client = options.prisma ?? (defaultPrisma as unknown as AppSettingClient);
   const safeState = normaliseState(state);
-  writeFileSync(path, `${JSON.stringify(safeState, null, 2)}\n`, "utf8");
+  const value = JSON.stringify(safeState);
+  await client.appSetting.upsert({
+    where: { key: APP_SETTING_KEY },
+    create: { key: APP_SETTING_KEY, value },
+    update: { value },
+  });
 }
 
 /**
  * Validate + repair an unknown payload into a {@link DatasetModeStateFile}.
- * Exported so tests can exercise the corruption-recovery path without
- * touching the filesystem.
+ * Pure — no I/O. Exported so tests (and the seed script) can exercise
+ * the corruption-recovery path directly.
  */
 export function normaliseState(
   raw: Partial<DatasetModeStateFile> | null | undefined,

@@ -1,0 +1,13 @@
+{
+  "data_version": "v1780163872-s42",
+  "last_data_update": "2026-05-30T17:57:52.092Z",
+  "entity_counts": {
+    "students": 200,
+    "courses": 1,
+    "enrollments": 200,
+    "resources": 40,
+    "lms-events": 34599,
+    "grades": 200,
+    "advisor-notes": 16
+  }
+}

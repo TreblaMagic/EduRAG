@@ -5,13 +5,24 @@
 # reviewer can run a fully isolated demo with two commands:
 #
 #   docker compose build
-#   docker compose up
+#   docker compose up                # app only (SQLite, default)
 #
 # Visit http://localhost:3000.
+#
+# Phase 12B addition: a Postgres service is included so local devs can
+# exercise the Postgres provider path before pushing to Vercel/Neon:
+#
+#   docker compose up -d db          # Postgres only (port 5432)
+#
+# Then point .env at it:
+#   DATABASE_PROVIDER=postgresql
+#   DATABASE_URL="postgresql://edurag:edurag@localhost:5432/edurag"
+#   npm run prisma:generate && npx prisma migrate deploy && npx prisma db seed
 #
 # Volumes:
 #   - edurag_db   : SQLite database (survives container rebuilds)
 #   - edurag_data : Generated synthetic CSV + Shell University seed
+#   - edurag_pg   : Postgres data directory
 # =============================================================================
 
 services:
@@ -21,6 +32,7 @@ services:
       - "3000:3000"
     environment:
       NODE_ENV: production
+      DATABASE_PROVIDER: sqlite
       DATABASE_URL: "file:./prisma/dev.db"
     volumes:
       - edurag_db:/app/prisma
@@ -28,6 +40,24 @@ services:
     # Restart unless explicitly stopped — helps for unattended demos.
     restart: unless-stopped
 
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: edurag
+      POSTGRES_PASSWORD: edurag
+      POSTGRES_DB: edurag
+    volumes:
+      - edurag_pg:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U edurag -d edurag"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
 volumes:
   edurag_db:
   edurag_data:
+  edurag_pg:

@@ -4,10 +4,10 @@
 > data into **causally-grounded, intervention-oriented** recommendations —
 > not just a black-box risk score.
 
-[![tests](https://img.shields.io/badge/tests-305%20passing-brightgreen)]()
+[![tests](https://img.shields.io/badge/tests-313%20passing-brightgreen)]()
 [![typecheck](https://img.shields.io/badge/typecheck-clean-brightgreen)]()
 [![build](https://img.shields.io/badge/build-passing-brightgreen)]()
-[![phase](https://img.shields.io/badge/phase-12A%20github%20readiness-blue)]()
+[![phase](https://img.shields.io/badge/phase-12C%20vercel%20deploy-blue)]()
 [![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
 <!-- Live demo + CI / Vercel status badges land in Phase 12D after the first deploy goes up. -->
 
@@ -174,6 +174,52 @@ npm run causal:estimate            # cohort-level β + refutations
 npm run causal:simulate            # per-student counterfactual interventions
 npm run ml:predict                 # baseline ML predictions (Phase 8)
 ```
+
+---
+
+## Choosing a database provider (Phase 12B)
+
+The Prisma schema is **multi-provider** as of Phase 12B. The active
+provider is chosen by the `DATABASE_PROVIDER` env var, read by Prisma
+at `prisma generate` time.
+
+| Path                      | `DATABASE_PROVIDER` | `DATABASE_URL`                                       |
+| ------------------------- | ------------------- | ---------------------------------------------------- |
+| Local default (SQLite)    | `sqlite`            | `file:./prisma/dev.db`                               |
+| Vercel / Neon (Postgres)  | `postgresql`        | `postgresql://…@…neon.tech/edurag?sslmode=require`   |
+| Local Postgres (Docker)   | `postgresql`        | `postgresql://edurag:edurag@localhost:5432/edurag`   |
+
+`.env.example` ships with the SQLite defaults so the two-command demo
+keeps working unchanged on a fresh clone.
+
+### Switching to Postgres locally
+
+The Phase 9 Docker stack ships a Postgres service ready to use. Pick
+either path:
+
+```bash
+# 1. Spin up Postgres in Docker (one-time).
+docker compose up -d db          # exposes postgres on localhost:5432
+
+# 2. Override the env vars in .env (or export them).
+echo 'DATABASE_PROVIDER=postgresql' >> .env
+echo 'DATABASE_URL="postgresql://edurag:edurag@localhost:5432/edurag"' >> .env
+
+# 3. Regenerate the Prisma client for the new provider + apply migrations.
+npm run prisma:generate
+npx prisma migrate deploy
+
+# 4. Seed (the seed step is idempotent — exits cleanly if data already exists).
+npx prisma db seed
+```
+
+To return to SQLite, restore the defaults from `.env.example` and run
+`npm run prisma:generate` again.
+
+> **Note:** `prisma generate` is sensitive to `DATABASE_PROVIDER` —
+> always set it (in `.env` or process env) before running prisma
+> commands. CI and Vercel both inject it via the deployment env block,
+> so this only matters locally.
 
 ---
 
