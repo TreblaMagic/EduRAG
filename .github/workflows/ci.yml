@@ -1,25 +1,28 @@
-# Phase 12A — EduRAG CI (fix: apply Prisma migrations before next build)
+# Phase 12B/12C correction — EduRAG CI (Postgres-only).
 #
-# Typecheck + tests + build on every PR to main and every push to main.
-# Deliberately does NOT deploy — Vercel handles its own build/deploy when
-# the repo is connected (Phase 12C).
+# Why a Postgres service container:
 #
-# Why we run `prisma migrate deploy` before `next build`:
+#   Prisma 5.x rejects `provider = env("DATABASE_PROVIDER")` at validation
+#   time, so we cannot switch SQLite ⇄ Postgres at runtime. The schema is
+#   now `provider = "postgresql"` (literal). The CI job therefore needs a
+#   real Postgres reachable at build/test time:
 #
-#   Next.js evaluates server components during the build to collect page
-#   data even for dynamic pages, and the global <AppShell> renders
-#   <DatasetModeBanner> which calls Prisma. Without an applied schema the
-#   underlying SQLite database file has no tables and the build crashes
-#   with "The table `main.Student` does not exist".
+#     - We boot postgres:16-alpine as a job service.
+#     - We point DATABASE_URL + DIRECT_URL at it (no pooler in CI; the same
+#       URL is used for both).
+#     - We run `prisma db push --skip-generate --accept-data-loss` to
+#       materialise the schema directly from prisma/schema.prisma. We
+#       deliberately do NOT use `prisma migrate deploy` here because the
+#       repo no longer ships a committed Postgres migration history
+#       (the SQLite migrations are archived under prisma/migrations-sqlite/
+#       for reference; a fresh Postgres migration set will be regenerated
+#       by the operator before the first Vercel deploy and committed
+#       separately).
 #
-#   `prisma migrate deploy` is non-interactive and idempotent — it applies
-#   every committed migration if the DB exists, or creates it from scratch
-#   if it doesn't. We don't run `prisma db seed` in CI — the goal is only
-#   to ensure tables exist so the build's Prisma probes return empty
-#   results (zero rows) instead of throwing.
-#
-# Uses SQLite throughout. Phase 12B will introduce the env-driven multi-
-# provider schema; the env vars below are already shaped for that future.
+# The build runs against the same Postgres so Next.js's static-prerender
+# pass (which invokes Prisma probes from the global <AppShell>) finds the
+# tables it expects. The <DatasetModeBanner> fallback added in Phase 12A
+# still protects us if anything in this chain breaks.
 
 name: CI
 
@@ -37,9 +40,28 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: edurag
+          POSTGRES_PASSWORD: edurag_ci_password
+          POSTGRES_DB: edurag
+        ports:
+          - 5432:5432
+        # GitHub-Actions services don't run docker-compose-style healthchecks
+        # by default — wire one up explicitly so we don't race the db's
+        # first-boot before `prisma db push`.
+        options: >-
+          --health-cmd="pg_isready -U edurag -d edurag"
+          --health-interval=5s
+          --health-timeout=3s
+          --health-retries=10
+
     env:
-      DATABASE_PROVIDER: sqlite
-      DATABASE_URL: "file:./prisma/dev.db"
+      DATABASE_URL: "postgresql://edurag:edurag_ci_password@localhost:5432/edurag?schema=public"
+      DIRECT_URL: "postgresql://edurag:edurag_ci_password@localhost:5432/edurag?schema=public"
       # Keep CI noise low for the optional Python engine probes — there's
       # no Python on the GitHub runner by default and the TS baseline is
       # the only thing the tests exercise.
@@ -70,16 +92,11 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
 
-      - name: Apply Prisma migrations
-        # `migrate deploy` is the right tool for CI — non-interactive,
-        # idempotent, applies every committed migration. If migrations
-        # are missing or incompatible for any reason, fall back to
-        # `prisma db push` which materialises the current schema directly
-        # against the empty SQLite DB without needing a migration history.
-        run: |
-          npx prisma migrate deploy \
-            || (echo "migrate deploy failed; falling back to db push" \
-                && npx prisma db push --skip-generate --accept-data-loss)
+      - name: Materialise Postgres schema
+        # `db push` works without any migration history — it diffs the
+        # schema against the live DB and creates whatever's missing. Safe
+        # in CI because the Postgres service is empty on every run.
+        run: npx prisma db push --skip-generate --accept-data-loss
 
       - name: Typecheck
         run: npx tsc --noEmit

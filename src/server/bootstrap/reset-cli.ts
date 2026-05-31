@@ -59,13 +59,15 @@ function parseArgs(args: string[]): CliOptions {
 }
 
 /**
- * Deletion order chosen so child rows go before parents — SQLite does
- * not enforce FKs the way PG does, but order makes the operation
- * predictable and survives a Postgres swap.
+ * Deletion order chosen so child rows go before parents — Postgres
+ * enforces FKs strictly, so this order matters now (was a
+ * defence-in-depth nicety under SQLite). Includes
+ * InterventionDecision (Phase 11) and AppSetting (Phase 12B).
  */
 async function wipeDemoTables(): Promise<Record<string, number>> {
   const counts: Record<string, number> = {};
   const steps: ReadonlyArray<[string, () => Promise<{ count: number }>]> = [
+    ["InterventionDecision", () => prisma.interventionDecision.deleteMany({})],
     ["BaselinePrediction", () => prisma.baselinePrediction.deleteMany({})],
     ["InterventionSimulation", () => prisma.interventionSimulation.deleteMany({})],
     ["CausalEstimate", () => prisma.causalEstimate.deleteMany({})],

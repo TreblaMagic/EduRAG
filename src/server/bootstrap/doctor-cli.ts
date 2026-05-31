@@ -4,7 +4,7 @@
  * Read-only. Prints a structured report of:
  *
  *   - Environment   (Node version, npm install, .env, Python)
- *   - Database      (Prisma client, SQLite file, row counts per table)
+ *   - Database      (Prisma client, DATABASE_URL shape, Postgres row counts)
  *   - Data files    (synthetic CSV, Shell University seed)
  *   - Optional features (advanced causal engine, advanced prediction engine, reports)
  *

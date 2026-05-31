@@ -1,63 +1,62 @@
 # =============================================================================
-# EduRAG — optional docker-compose.
+# EduRAG — docker-compose (Postgres + app).
 #
-# Local-first remains the recommended path. This compose file exists so a
-# reviewer can run a fully isolated demo with two commands:
-#
-#   docker compose build
-#   docker compose up                # app only (SQLite, default)
-#
-# Visit http://localhost:3000.
-#
-# Phase 12B addition: a Postgres service is included so local devs can
-# exercise the Postgres provider path before pushing to Vercel/Neon:
+# Phase 12B/12C correction (2026-05-30): EduRAG is Postgres-only now —
+# Prisma 5.x does not support an env-driven `provider`, so we cannot
+# switch SQLite ⇄ Postgres at runtime. Local dev runs against the `db`
+# service below; SQLite is no longer the default.
 #
 #   docker compose up -d db          # Postgres only (port 5432)
+#   docker compose up                # full app + db
 #
-# Then point .env at it:
-#   DATABASE_PROVIDER=postgresql
-#   DATABASE_URL="postgresql://edurag:edurag@localhost:5432/edurag"
-#   npm run prisma:generate && npx prisma migrate deploy && npx prisma db seed
+# Secrets:
+#   - POSTGRES_PASSWORD is read from your `.env` (or the shell). A
+#     safe local-only default is interpolated when the var is unset.
+#     The literal "edurag_local_password" is intentional and obvious;
+#     it must NEVER be used outside this docker-compose stack.
+#   - For Vercel + Neon (production), DATABASE_URL / DIRECT_URL /
+#     CRON_SECRET are pasted into the Vercel project env block —
+#     no compose involvement.
 #
 # Volumes:
-#   - edurag_db   : SQLite database (survives container rebuilds)
 #   - edurag_data : Generated synthetic CSV + Shell University seed
 #   - edurag_pg   : Postgres data directory
 # =============================================================================
 
 services:
-  edurag:
-    build: .
-    ports:
-      - "3000:3000"
-    environment:
-      NODE_ENV: production
-      DATABASE_PROVIDER: sqlite
-      DATABASE_URL: "file:./prisma/dev.db"
-    volumes:
-      - edurag_db:/app/prisma
-      - edurag_data:/app/data
-    # Restart unless explicitly stopped — helps for unattended demos.
-    restart: unless-stopped
-
   db:
     image: postgres:16-alpine
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: edurag
-      POSTGRES_PASSWORD: edurag
-      POSTGRES_DB: edurag
+      POSTGRES_USER: ${POSTGRES_USER:-edurag}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-edurag_local_password}
+      POSTGRES_DB: ${POSTGRES_DB:-edurag}
     volumes:
       - edurag_pg:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U edurag -d edurag"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-edurag} -d ${POSTGRES_DB:-edurag}"]
       interval: 5s
       timeout: 3s
       retries: 10
 
+  edurag:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      # In-network address — uses the compose service name, not localhost.
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-edurag}:${POSTGRES_PASSWORD:-edurag_local_password}@db:5432/${POSTGRES_DB:-edurag}?schema=public"
+      DIRECT_URL: "postgresql://${POSTGRES_USER:-edurag}:${POSTGRES_PASSWORD:-edurag_local_password}@db:5432/${POSTGRES_DB:-edurag}?schema=public"
+    volumes:
+      - edurag_data:/app/data
+    restart: unless-stopped
+
 volumes:
-  edurag_db:
   edurag_data:
   edurag_pg:

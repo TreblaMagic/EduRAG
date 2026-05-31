@@ -1,18 +1,24 @@
 // =============================================================================
-// EduRAG — Prisma schema (multi-provider as of Phase 12B)
+// EduRAG — Prisma schema (Postgres only as of the Phase 12B/12C correction)
 //
-// The `provider` is read from `DATABASE_PROVIDER` at `prisma generate` time:
-//   - "sqlite"     — local default; URL = file:./prisma/dev.db
-//   - "postgresql" — Vercel / Neon path; URL = postgres://…pooler…
+// Why Postgres-only:
+//   - Prisma 5.x does NOT accept env() in the `provider` field — the
+//     attempted multi-provider switch (Phase 12B, since reverted) failed
+//     validation at `prisma generate` time. EduRAG now commits to a
+//     single provider so the schema, migrations, and client all match.
+//   - Vercel + Neon is the deployment target. Local dev uses the
+//     Postgres service in `docker-compose.yml` (`docker compose up -d db`).
 //
-// The schema stays portable across both. Notes for the Postgres path:
-//   - String columns holding JSON (e.g. InterventionSimulation.notesJson) can
-//     be promoted to `Json` for native PG JSONB if we ever want predicate
-//     pushdown on them.
-//   - String fields documented as enum-like (resource type, activity type, …)
-//     can be promoted to true Prisma `enum` definitions on Postgres.
-//   - All `cuid()` IDs, indexes, unique constraints, and cascades carry over
-//     unchanged on both providers.
+// Notes for future refactors:
+//   - String columns holding JSON (e.g. InterventionSimulation.notesJson)
+//     can be promoted to `Json` for native PG JSONB if we ever want
+//     predicate pushdown.
+//   - String fields documented as enum-like (resource type, activity
+//     type, …) can be promoted to true Prisma `enum` definitions —
+//     Postgres supports them natively, SQLite did not.
+//   - `directUrl` is required when the primary `url` points at a
+//     connection-pooler (Neon, PgBouncer). Set to the unpooled DSN
+//     locally + on Vercel.
 // =============================================================================
 
 generator client {
@@ -20,8 +26,9 @@ generator client {
 }
 
 datasource db {
-  provider = env("DATABASE_PROVIDER")
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // -----------------------------------------------------------------------------

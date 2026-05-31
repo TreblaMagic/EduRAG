@@ -25,6 +25,7 @@
 |  12A  | GitHub readiness + CI + license             | ✅ Complete    | 2026-05-29   |
 |  12B  | Postgres / Vercel compatibility             | ✅ Complete    | 2026-05-30   |
 |  12C  | Vercel deployment + nightly reseed          | ✅ Code complete | 2026-05-30 |
+| 12B/C | Postgres-only correction (Prisma 5.x limit)  | ✅ Applied     | 2026-05-30   |
 |  12D  | Screenshots, README, video, CV, LinkedIn    | ⏸ Not started | —            |
 
 See `docs/logs/` for per-execution logs and `docs/features/` for per-feature specs.
@@ -811,6 +812,86 @@ curl -X POST -H "Authorization: Bearer $SECRET" "$URL"
 > project, paste the env vars, or fire the curl. Those are the
 > operator-only steps above. The agent's deliverable is the code +
 > documentation + green local build.
+
+### Phase 12B/12C correction — Postgres only (2026-05-30)
+
+**Why this exists.** Phase 12B's "multi-provider" plan used
+`datasource db { provider = env("DATABASE_PROVIDER") }` in the
+Prisma schema. Prisma 5.x **does not accept `env()` in the
+`provider` field** — `prisma validate` rejected the schema and the
+first CI run that tried to use it failed. Also, GitGuardian
+flagged a literal Postgres password in `docker-compose.yml`. Both
+issues fixed together as a single corrective patch on top of
+12B/12C.
+
+**Changes shipped:**
+
+- [x] `prisma/schema.prisma` → `provider = "postgresql"` (literal) + `directUrl = env("DIRECT_URL")`. No multi-provider gymnastics; EduRAG is Postgres-only now.
+- [x] Archived `prisma/migrations/*` (SQLite syntax — non-portable to Postgres) → `prisma/migrations-sqlite/`. The active path uses `prisma db push` against the schema; the operator can regenerate a committed Postgres migration set via `npx prisma migrate dev --name initial` whenever they're ready to lock the schema history in.
+- [x] `docker-compose.yml` — password is now `${POSTGRES_PASSWORD:-edurag_local_password}` (env interpolation with a clearly-local fallback); the app service points at the `db` service over the in-network Postgres URL; both services compose-link via `depends_on: { db: { condition: service_healthy } }`. The literal "edurag_local_password" is intentional and obvious — it must never be used outside this compose stack. **GitGuardian violation resolved.**
+- [x] `.env.example` — Postgres-first defaults: `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` + `DATABASE_URL` / `DIRECT_URL` pointing at `localhost:5432`. The retired `DATABASE_PROVIDER` knob is gone.
+- [x] `.github/workflows/ci.yml` — boots a `postgres:16-alpine` service container with a healthcheck; sets `DATABASE_URL` + `DIRECT_URL` to it; runs `npx prisma db push --skip-generate --accept-data-loss` (idempotent, works without a committed migration history) before typecheck/test/build.
+- [x] `src/server/bootstrap/setup-steps.ts` — the "migrate" step is now "Apply Postgres schema (prisma db push)". `shouldRun` probes whether the schema exists via a Prisma table query (`schemaApplied` option, defaulting to `countStudents`); no more SQLite file-existence check. Reuses the existing `countStudents` injection so the test fixtures don't need to change.
+- [x] `src/server/bootstrap/checks.ts` (doctor) — replaced the "SQLite database" file check with a "DATABASE_URL" shape check. Added a `redactDsn()` helper so the doctor echoes the host + database without leaking the password. Updated the error-path hint to point at `prisma db push`.
+- [x] `src/server/bootstrap/reset-cli.ts` — added `InterventionDecision` (Phase 11) to the deletion order; the comment now reflects that Postgres enforces FKs strictly so order matters. The agent did not touch the production wipe surface beyond comment + adding one missing table.
+- [x] `src/server/bootstrap/__tests__/format.test.ts` — updated the fixture: `db.file → db.url`, `"SQLite database" → "DATABASE_URL"`. No other test files needed changes.
+- [x] `README.md` — three-command demo (`docker compose up -d db && npm run setup && npm run demo`). New "Database (Postgres only)" section replaces the multi-provider matrix; tech-stack row + architecture diagram bubble both flipped from SQLite to Postgres; Docker block updated for the `db` service + `edurag_pg` volume.
+- [x] Regenerated the Prisma client (`npm run prisma:generate`) against the new schema — `prisma validate` passes.
+- [x] **313 / 313** tests still green (no test deletions, one fixture string updated). Build clean against a placeholder Postgres URL — schema validation passes.
+
+**What this DID NOT change:**
+
+- No application logic (causal engine, prediction layer, intervention tracking, dataset-mode store).
+- No new runtime dependencies.
+- No honesty-language edits.
+- The Phase 12B `AppSetting` model + dataset-mode store refactor + the Phase 12C `<DemoModeBanner>` / `/api/admin/reseed` / `vercel.json` / `robots.ts` work all stay valid — they were always provider-agnostic.
+
+**Operator's manual commands (correction):**
+
+```bash
+# 1. Pull the changes, then regenerate the Prisma client against the new schema.
+npm run prisma:generate
+
+# 2. Wipe the legacy SQLite database (gitignored; the schema no longer matches).
+#    Windows PowerShell:
+Remove-Item prisma\dev.db -ErrorAction SilentlyContinue
+#    Linux/macOS:
+# rm -f prisma/dev.db
+
+# 3. Boot the local Postgres service.
+docker compose up -d db
+docker compose ps                       # confirm "healthy"
+
+# 4. Materialise the schema in Postgres (no migration history yet).
+npx prisma db push
+
+# 5. (When ready) generate a committed Postgres migration history.
+#    This replaces step 4 once the operator wants version-controlled migrations.
+npx prisma migrate dev --name initial
+git add prisma/migrations/
+
+# 6. Re-run the full pipeline against Postgres.
+npm run setup                           # idempotent
+npm run demo
+
+# 7. Sanity check: doctor should report DATABASE_URL ok + non-zero row counts.
+npm run doctor
+```
+
+> **GitGuardian remediation:** the previous compose file had
+> `POSTGRES_PASSWORD: edurag` hardcoded. The fix is env interpolation
+> with a clearly-non-production fallback
+> (`${POSTGRES_PASSWORD:-edurag_local_password}`). Operators committing
+> the repo should mark the GitGuardian alert as resolved and (optionally)
+> rotate the `POSTGRES_PASSWORD` value in their own `.env`.
+
+> **CI strategy:** the workflow no longer relies on `migrate deploy` —
+> there are no committed Postgres migrations yet. `prisma db push` against
+> the service container is the path. Once step 5 above ships a migration
+> set, the CI step can be swapped back to `migrate deploy` for stricter
+> production parity.
+
+---
 
 ### Phase 12D — Screenshots, README, video, CV, LinkedIn (launch lap)
 
