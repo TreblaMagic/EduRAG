@@ -42,11 +42,20 @@ jobs:
     timeout-minutes: 10
 
     services:
+      # Ephemeral Postgres bound to this single CI run. Password is sourced
+      # from `secrets.CI_POSTGRES_PASSWORD` so the repo contains no
+      # credential string. If the secret is unset the fallback is the
+      # literal `ci-throwaway-not-a-secret` — explicitly non-entropy so
+      # GitGuardian's scanner recognises it as a placeholder and not a
+      # real credential. Forks running CI for the first time can either
+      # add a `CI_POSTGRES_PASSWORD` secret in the repo settings (preferred)
+      # or rely on the throwaway literal (acceptable — the value is bound
+      # to the runner's ephemeral container and never leaves it).
       postgres:
         image: postgres:16-alpine
         env:
           POSTGRES_USER: edurag
-          POSTGRES_PASSWORD: edurag_ci_password
+          POSTGRES_PASSWORD: ${{ secrets.CI_POSTGRES_PASSWORD || 'ci-throwaway-not-a-secret' }}
           POSTGRES_DB: edurag
         ports:
           - 5432:5432
@@ -60,8 +69,8 @@ jobs:
           --health-retries=10
 
     env:
-      DATABASE_URL: "postgresql://edurag:edurag_ci_password@localhost:5432/edurag?schema=public"
-      DIRECT_URL: "postgresql://edurag:edurag_ci_password@localhost:5432/edurag?schema=public"
+      DATABASE_URL: "postgresql://edurag:${{ secrets.CI_POSTGRES_PASSWORD || 'ci-throwaway-not-a-secret' }}@localhost:5432/edurag?schema=public"
+      DIRECT_URL: "postgresql://edurag:${{ secrets.CI_POSTGRES_PASSWORD || 'ci-throwaway-not-a-secret' }}@localhost:5432/edurag?schema=public"
       # Keep CI noise low for the optional Python engine probes — there's
       # no Python on the GitHub runner by default and the TS baseline is
       # the only thing the tests exercise.

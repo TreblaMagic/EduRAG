@@ -65,13 +65,17 @@ matches what we actually deploy.
 
 **Secrets posture**
 
-- `docker-compose.yml` — `POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-edurag_local_password}`.
-  Env interpolation with a clearly-local fallback. The literal
-  is intentional and obvious — it must never be used outside
-  this compose stack. `POSTGRES_USER` + `POSTGRES_DB` got the
-  same treatment for consistency. The app service now
+- `docker-compose.yml` — `POSTGRES_PASSWORD` now sourced from env
+  interpolation with a non-secret literal fallback. The literal
+  was intentional + obvious — never to be used outside this
+  compose stack. `POSTGRES_USER` + `POSTGRES_DB` got the same
+  treatment for consistency. The app service now
   `depends_on: { db: { condition: service_healthy } }` and
   builds its `DATABASE_URL` from the same env vars.
+  **Superseded later the same day** by the GitGuardian + Vercel
+  remediation, which removed even the fallback literal and
+  switched to `${POSTGRES_PASSWORD:?...}` (required, no default).
+  See `2026-05-30-phase-12c-vercel-postinstall-and-secrets-hardening.md`.
 - `.env.example` — Postgres-first defaults. The retired
   `DATABASE_PROVIDER` knob is gone. `POSTGRES_USER` /
   `POSTGRES_PASSWORD` / `POSTGRES_DB` documented so the values
@@ -88,8 +92,9 @@ matches what we actually deploy.
   `npx prisma db push --skip-generate --accept-data-loss`
   between `prisma generate` and the typecheck/test/build steps —
   `migrate deploy` isn't useful while there's no committed
-  migration history. CI password (`edurag_ci_password`) is
-  ephemeral to the runner and stays in the workflow file.
+  migration history. CI password was a non-secret workflow literal
+  at this point — later replaced by `${{ secrets.CI_POSTGRES_PASSWORD }}`
+  with a non-entropy fallback in the secrets-hardening pass.
 
 **Bootstrap CLIs**
 
@@ -164,13 +169,12 @@ matches what we actually deploy.
 **Prisma validation:** PASSES. The previous `env() in provider`
 error is gone.
 
-**GitGuardian:** the only literal credential left in the repo is
-the deliberately-obvious `edurag_local_password` fallback in
-`docker-compose.yml` (visible inline so reviewers can spot it as
-local-only) and the matching string in `.env.example`. Both are
-inside files that are designed to ship insecure local defaults.
-The alert should be marked as a false positive and the
-remediation noted in the GitGuardian dashboard.
+**GitGuardian:** at this point the only literal credential-shaped
+strings left in the repo were the deliberately-obvious local-only
+fallback in `docker-compose.yml` + the matching string in
+`.env.example`. GitGuardian re-flagged those — they were removed
+in the follow-up secrets-hardening pass later the same day. See
+`2026-05-30-phase-12c-vercel-postinstall-and-secrets-hardening.md`.
 
 ---
 
@@ -180,7 +184,12 @@ remediation noted in the GitGuardian dashboard.
 services:
   postgres:
     image: postgres:16-alpine
-    env: { POSTGRES_USER: edurag, POSTGRES_PASSWORD: edurag_ci_password, POSTGRES_DB: edurag }
+    env:
+      POSTGRES_USER: edurag
+      # Later replaced with `${{ secrets.CI_POSTGRES_PASSWORD || 'ci-throwaway-not-a-secret' }}`
+      # in the secrets-hardening pass.
+      POSTGRES_PASSWORD: <non-secret CI literal>
+      POSTGRES_DB: edurag
     ports: ["5432:5432"]
     options: --health-cmd="pg_isready -U edurag -d edurag" ...
 
@@ -217,10 +226,12 @@ whatever's missing, idempotent on re-run.
   gitignored and unused under the new schema; the operator
   should delete it (`rm prisma/dev.db` or Remove-Item) to
   avoid confusion when running `doctor`.
-- **`edurag_local_password` is a known-default credential.**
-  It's never used outside the local compose stack and never
-  reachable from outside the docker network, but devs who want
-  belt-and-braces can override it in their own `.env`.
+- **Local-default credential literal — removed in follow-up pass.**
+  The compose fallback was a known, deliberately-non-production
+  string. GitGuardian re-flagged it; the secrets-hardening pass
+  later the same day switched to `${POSTGRES_PASSWORD:?...}` so
+  no literal lives in the repo at all. See
+  `2026-05-30-phase-12c-vercel-postinstall-and-secrets-hardening.md`.
 - **Phase 12B's `AppSetting` migration must still be generated.**
   The previous Phase 12B operator commands suggested
   `prisma migrate dev --name phase12b_app_setting`. Under the

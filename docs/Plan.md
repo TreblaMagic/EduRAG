@@ -26,6 +26,7 @@
 |  12B  | Postgres / Vercel compatibility             | ✅ Complete    | 2026-05-30   |
 |  12C  | Vercel deployment + nightly reseed          | ✅ Code complete | 2026-05-30 |
 | 12B/C | Postgres-only correction (Prisma 5.x limit)  | ✅ Applied     | 2026-05-30   |
+| 12C+  | Vercel postinstall + GitGuardian hardening   | ✅ Applied     | 2026-05-30   |
 |  12D  | Screenshots, README, video, CV, LinkedIn    | ⏸ Not started | —            |
 
 See `docs/logs/` for per-execution logs and `docs/features/` for per-feature specs.
@@ -705,23 +706,27 @@ npm run shell:seed
 git add data/raw/sample_lms_data.csv data/shell-university/*.json
 
 # 4. (Optional) Exercise the Postgres path before deploying.
+#    NOTE: This block is HISTORICAL — the Phase 12B/12C correction
+#    superseded the multi-provider plan with Postgres-only. See the
+#    "Phase 12B/12C correction" subsection below for the current path.
+#    URL placeholders use <pw> to avoid shipping credential literals.
 docker compose up -d db                       # starts Postgres on :5432
 # Override .env (or export inline):
 DATABASE_PROVIDER=postgresql \
-  DATABASE_URL="postgresql://edurag:edurag@localhost:5432/edurag" \
+  DATABASE_URL="postgresql://edurag:<pw>@localhost:5432/edurag" \
   npm run prisma:generate
 DATABASE_PROVIDER=postgresql \
-  DATABASE_URL="postgresql://edurag:edurag@localhost:5432/edurag" \
+  DATABASE_URL="postgresql://edurag:<pw>@localhost:5432/edurag" \
   npx prisma migrate dev --name phase12b_app_setting
 DATABASE_PROVIDER=postgresql \
-  DATABASE_URL="postgresql://edurag:edurag@localhost:5432/edurag" \
+  DATABASE_URL="postgresql://edurag:<pw>@localhost:5432/edurag" \
   npx prisma db seed                          # runs the new prisma/seed.ts
 # Return to SQLite by restoring .env defaults and running prisma:generate again.
 
 # 5. (One-time) Verify both providers green:
 DATABASE_PROVIDER=sqlite npm test
 # Optional Postgres test pass (requires step 4):
-# DATABASE_PROVIDER=postgresql DATABASE_URL="postgresql://edurag:edurag@localhost:5432/edurag" npm test
+# DATABASE_PROVIDER=postgresql DATABASE_URL="postgresql://edurag:<pw>@localhost:5432/edurag" npm test
 ```
 
 > Per `CLAUDE.md`, the agent did not run `prisma migrate`, `prisma db seed`,
@@ -828,7 +833,7 @@ issues fixed together as a single corrective patch on top of
 
 - [x] `prisma/schema.prisma` → `provider = "postgresql"` (literal) + `directUrl = env("DIRECT_URL")`. No multi-provider gymnastics; EduRAG is Postgres-only now.
 - [x] Archived `prisma/migrations/*` (SQLite syntax — non-portable to Postgres) → `prisma/migrations-sqlite/`. The active path uses `prisma db push` against the schema; the operator can regenerate a committed Postgres migration set via `npx prisma migrate dev --name initial` whenever they're ready to lock the schema history in.
-- [x] `docker-compose.yml` — password is now `${POSTGRES_PASSWORD:-edurag_local_password}` (env interpolation with a clearly-local fallback); the app service points at the `db` service over the in-network Postgres URL; both services compose-link via `depends_on: { db: { condition: service_healthy } }`. The literal "edurag_local_password" is intentional and obvious — it must never be used outside this compose stack. **GitGuardian violation resolved.**
+- [x] `docker-compose.yml` — password is now sourced via env interpolation; the app service points at the `db` service over the in-network Postgres URL; both services compose-link via `depends_on: { db: { condition: service_healthy } }`. *(Note: this first pass used a non-secret fallback literal; the follow-up Vercel + GitGuardian remediation later the same day removed even that fallback and switched to the required-var `${POSTGRES_PASSWORD:?...}` syntax. See `docs/logs/2026-05-30-phase-12c-vercel-postinstall-and-secrets-hardening.md`.)*
 - [x] `.env.example` — Postgres-first defaults: `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` + `DATABASE_URL` / `DIRECT_URL` pointing at `localhost:5432`. The retired `DATABASE_PROVIDER` knob is gone.
 - [x] `.github/workflows/ci.yml` — boots a `postgres:16-alpine` service container with a healthcheck; sets `DATABASE_URL` + `DIRECT_URL` to it; runs `npx prisma db push --skip-generate --accept-data-loss` (idempotent, works without a committed migration history) before typecheck/test/build.
 - [x] `src/server/bootstrap/setup-steps.ts` — the "migrate" step is now "Apply Postgres schema (prisma db push)". `shouldRun` probes whether the schema exists via a Prisma table query (`schemaApplied` option, defaulting to `countStudents`); no more SQLite file-existence check. Reuses the existing `countStudents` injection so the test fixtures don't need to change.
@@ -878,18 +883,111 @@ npm run demo
 npm run doctor
 ```
 
-> **GitGuardian remediation:** the previous compose file had
-> `POSTGRES_PASSWORD: edurag` hardcoded. The fix is env interpolation
-> with a clearly-non-production fallback
-> (`${POSTGRES_PASSWORD:-edurag_local_password}`). Operators committing
-> the repo should mark the GitGuardian alert as resolved and (optionally)
-> rotate the `POSTGRES_PASSWORD` value in their own `.env`.
+> **GitGuardian remediation (first pass — superseded later the same day):**
+> the previous compose file had a hardcoded `POSTGRES_PASSWORD`. The first
+> pass moved it to env interpolation with a non-secret literal fallback.
+> GitGuardian still flagged the fallback string, so a follow-up pass
+> removed even that — the schema is now `${POSTGRES_PASSWORD:?...}` (no
+> fallback; compose refuses to start without a real value). See
+> `docs/logs/2026-05-30-phase-12c-vercel-postinstall-and-secrets-hardening.md`.
 
 > **CI strategy:** the workflow no longer relies on `migrate deploy` —
 > there are no committed Postgres migrations yet. `prisma db push` against
 > the service container is the path. Once step 5 above ships a migration
 > set, the CI step can be swapped back to `migrate deploy` for stricter
 > production parity.
+
+---
+
+### Phase 12C+ — Vercel postinstall + GitGuardian hardening (2026-05-30)
+
+**Why this exists.** Two issues surfaced after the Phase 12B/12C
+correction shipped:
+
+1. **Vercel build failed** with Prisma's "this project was built on
+   Vercel, which caches dependencies … leads to an outdated Prisma
+   Client because Prisma's auto-generation isn't triggered" error.
+   Failure point: `Failed to collect page data for /_not-found`.
+2. **GitGuardian re-flagged `docker-compose.yml`** because the
+   first-pass remediation kept a non-secret literal fallback string
+   in env interpolation; the scanner still treats credential-shaped
+   strings as hardcoded.
+
+Both fixed in the same patch.
+
+**Changes shipped:**
+
+- [x] `package.json` — added two layers of Prisma client regeneration to defeat Vercel's dependency cache:
+  - `"postinstall": "prisma generate"` (Prisma's official Vercel recipe — runs after every `npm install` / `npm ci`).
+  - `"build": "prisma generate && next build"` (belt-and-braces — runs again if the install was cache-hit and postinstall was skipped).
+- [x] `docker-compose.yml` — switched from non-secret-fallback (`${POSTGRES_PASSWORD:-edurag_local_password}`) to **required-var** syntax (`${POSTGRES_PASSWORD:?see .env.example and set a strong local password}`). No credential string lives in the repo at all. `POSTGRES_USER` + `POSTGRES_DB` keep `:-edurag` fallbacks because they're not credentials. Both the `db` service env and the `edurag` app service `DATABASE_URL`/`DIRECT_URL` interpolations were updated.
+- [x] `.env.example` — `POSTGRES_PASSWORD` is now blank with an explicit "fill in before `docker compose up`" instruction. `DATABASE_URL` + `DIRECT_URL` are also blank with commented-shape examples (placeholders use `YOUR_LOCAL_PASSWORD`, not a credential-shaped literal).
+- [x] `.github/workflows/ci.yml` — CI Postgres password is now `${{ secrets.CI_POSTGRES_PASSWORD || 'ci-throwaway-not-a-secret' }}`. The literal fallback is intentionally low-entropy and self-documenting; the secret-set path is preferred. Both the service container env and the `DATABASE_URL`/`DIRECT_URL` workflow envs use the same interpolation.
+- [x] `README.md` — three-command demo updated: step 1 is now "edit `.env` and set `POSTGRES_PASSWORD`" with an `openssl rand -base64 24` suggestion. Local-Postgres workflow block updated to match. Database matrix uses placeholder URLs instead of literal-shaped credentials.
+- [x] `docs/Plan.md` + the Phase 12B/C correction log — cleaned up residual credential-shaped strings (replaced with `<pw>` / `<previous fallback literal>` placeholders) so GitGuardian's full-repo scan returns clean.
+- [x] **313 / 313** tests still green · typecheck clean · `npm run build` runs `prisma generate && next build` cleanly against a placeholder Postgres URL.
+
+**Vercel build fix summary**
+
+- Root cause: Vercel caches `node_modules` between deploys. When `@prisma/client` is restored from cache, the generated client may be stale (built against an older schema). Prisma 5 added a deliberate fail-fast error message when this is detected.
+- Fix: two-layer regeneration. `postinstall` runs every time the dependency set is installed; the modified `build` script runs `prisma generate` again immediately before `next build`. Either layer alone defeats the cache; both together are defence-in-depth.
+- No change to the Vercel project's build command is required — operators can keep the default `npm run build` and it will now Just Work. The previously-documented `prisma generate && prisma migrate deploy && prisma db seed && next build` build command remains valid for operators who want to pin the explicit chain.
+
+**GitGuardian remediation summary**
+
+- Root cause: GitGuardian's scanner pattern-matches credential-shaped strings even inside YAML interpolation fallbacks. `${POSTGRES_PASSWORD:-edurag_local_password}` looked like a hardcoded credential because `edurag_local_password` is a literal in the file.
+- Fix: `${POSTGRES_PASSWORD:?...}` is required-var syntax. If unset, compose exits with the error message before starting any services. No fallback literal in the file. Operator must set the var in `.env` before `docker compose up`.
+- Repo-wide audit: grep found credential-shaped strings in `README.md`, `docs/Plan.md`, the Phase 12B/C correction log, and `.env.example`. All replaced with placeholders (`<your-local-password>`, `<pw>`, blank values). `src/server/bootstrap/checks.ts` contains `user:pass` in a docstring spec — that's a format example, not a credential.
+
+**Security review (lightweight)**
+
+| Surface | Status |
+| ------- | ------ |
+| `DATABASE_URL` literals | None in repo. `.env.example` ships blank with shape examples; CI uses workflow secret; production env is on Vercel only. |
+| `DIRECT_URL` literals | Same as above. |
+| `CRON_SECRET` literals | None. `.env.example` ships blank; the Phase 12C reseed route returns 503 when the env var is unset locally. |
+| Docker credentials | `${POSTGRES_PASSWORD:?...}` required, no fallback. Compose refuses to start without `.env`. |
+| GitHub Actions secrets | `secrets.CI_POSTGRES_PASSWORD` is the canonical CI password source. The throwaway fallback is non-entropy + self-documenting. |
+| Accidentally-committed credentials | None found in source. `prisma/dev.db` is git-ignored; `.env` is git-ignored. |
+| Bundled secrets in client JS | None — every secret-touching file is server-only (`/api/admin/reseed/route.ts`, `src/lib/db.ts`, `src/server/dataset-mode/*`). |
+
+**Operator's manual steps (in order):**
+
+```bash
+# Local dev
+cp .env.example .env
+# Edit .env: set POSTGRES_PASSWORD to a strong value, then paste it into
+# DATABASE_URL and DIRECT_URL replacing YOUR_LOCAL_PASSWORD.
+docker compose up -d db                   # required-var syntax fails fast if not set
+npm install                                # postinstall regenerates the Prisma client
+npm run setup
+npm run demo
+```
+
+```text
+# GitHub repo settings (optional but recommended)
+Settings → Secrets and variables → Actions → New repository secret
+  Name:  CI_POSTGRES_PASSWORD
+  Value: <openssl rand -base64 24>
+```
+
+```text
+# Vercel project settings
+# No change needed to the build command — `npm run build` already runs
+# `prisma generate && next build`. Existing env vars stay:
+#   DATABASE_URL          (Neon pooler URL)
+#   DIRECT_URL            (Neon direct URL)
+#   DEMO_MODE             hosted
+#   NEXT_PUBLIC_APP_URL   https://<vercel-hostname>
+#   CRON_SECRET           <openssl rand -hex 32>
+# Trigger a re-deploy after pulling these changes.
+```
+
+```text
+# GitGuardian dashboard
+Mark the docker-compose.yml alert as RESOLVED. The credential-shaped
+fallback is gone; the file now contains zero literal secrets.
+```
 
 ---
 

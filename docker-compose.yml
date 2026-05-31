@@ -1,22 +1,38 @@
 # =============================================================================
 # EduRAG — docker-compose (Postgres + app).
 #
-# Phase 12B/12C correction (2026-05-30): EduRAG is Postgres-only now —
-# Prisma 5.x does not support an env-driven `provider`, so we cannot
-# switch SQLite ⇄ Postgres at runtime. Local dev runs against the `db`
-# service below; SQLite is no longer the default.
+# Postgres-only since the Phase 12B/12C correction. Prisma 5.x rejects an
+# env-driven `provider`, so the schema is locked to `postgresql` and local
+# dev runs against the `db` service below.
 #
 #   docker compose up -d db          # Postgres only (port 5432)
 #   docker compose up                # full app + db
 #
-# Secrets:
-#   - POSTGRES_PASSWORD is read from your `.env` (or the shell). A
-#     safe local-only default is interpolated when the var is unset.
-#     The literal "edurag_local_password" is intentional and obvious;
-#     it must NEVER be used outside this docker-compose stack.
-#   - For Vercel + Neon (production), DATABASE_URL / DIRECT_URL /
-#     CRON_SECRET are pasted into the Vercel project env block —
-#     no compose involvement.
+# ---------------------------------------------------------------------------
+# Secrets posture (GitGuardian-clean, no literals in this file):
+#
+#   POSTGRES_PASSWORD is REQUIRED. It is interpolated from your `.env`
+#   (or the shell). There is no fallback — `compose` will refuse to
+#   start the stack if the variable is not set. This is intentional:
+#   we ship zero credential strings in the repository.
+#
+#   Setup before first run:
+#     1. cp .env.example .env
+#     2. Edit .env and set POSTGRES_PASSWORD to a strong, local-only value
+#        (e.g. `openssl rand -base64 24`).
+#     3. docker compose up -d db
+#
+#   If you skip step 2 you will see:
+#     "error while interpolating ... required variable POSTGRES_PASSWORD
+#     is missing a value: see .env.example and set a strong local password"
+#
+#   POSTGRES_USER + POSTGRES_DB are NOT credentials and keep
+#   non-sensitive `:-edurag` fallbacks for ergonomic local-only use.
+#
+# Production (Vercel + Neon) never uses this file. DATABASE_URL /
+# DIRECT_URL / CRON_SECRET are pasted directly into the Vercel project
+# env block — see docs/Plan.md Phase 12C operator commands.
+# ---------------------------------------------------------------------------
 #
 # Volumes:
 #   - edurag_data : Generated synthetic CSV + Shell University seed
@@ -30,7 +46,7 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-edurag}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-edurag_local_password}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?see .env.example and set a strong local password}
       POSTGRES_DB: ${POSTGRES_DB:-edurag}
     volumes:
       - edurag_pg:/var/lib/postgresql/data
@@ -51,8 +67,9 @@ services:
     environment:
       NODE_ENV: production
       # In-network address — uses the compose service name, not localhost.
-      DATABASE_URL: "postgresql://${POSTGRES_USER:-edurag}:${POSTGRES_PASSWORD:-edurag_local_password}@db:5432/${POSTGRES_DB:-edurag}?schema=public"
-      DIRECT_URL: "postgresql://${POSTGRES_USER:-edurag}:${POSTGRES_PASSWORD:-edurag_local_password}@db:5432/${POSTGRES_DB:-edurag}?schema=public"
+      # POSTGRES_PASSWORD is required upstream; this interpolation reuses it.
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-edurag}:${POSTGRES_PASSWORD:?see .env.example and set a strong local password}@db:5432/${POSTGRES_DB:-edurag}?schema=public"
+      DIRECT_URL: "postgresql://${POSTGRES_USER:-edurag}:${POSTGRES_PASSWORD:?see .env.example and set a strong local password}@db:5432/${POSTGRES_DB:-edurag}?schema=public"
     volumes:
       - edurag_data:/app/data
     restart: unless-stopped

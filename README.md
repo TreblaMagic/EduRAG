@@ -14,20 +14,28 @@
 
 ---
 
-## Three-command demo
+## Local demo
 
 ```bash
 git clone <repo-url> && cd "EduRAG Prototype"
-cp .env.example .env             # local Postgres + demo defaults
 
-docker compose up -d db          # start Postgres (port 5432)
-npm run setup                    # install, generate, push schema, ingest, predict
+# 1. Copy the env template + set a strong POSTGRES_PASSWORD (required —
+#    docker compose refuses to start without it). The repo contains
+#    zero credential literals.
+cp .env.example .env
+#    Edit .env, fill in POSTGRES_PASSWORD and the two URL fields below it.
+#    Suggested: `openssl rand -base64 24` for a strong local-only value.
+
+# 2. Boot Postgres + the full pipeline.
+docker compose up -d db          # start Postgres on :5432 (env-required)
+npm install                      # postinstall regenerates the Prisma client
+npm run setup                    # push schema, ingest, estimate, simulate, predict
 npm run demo                     # setup-if-needed + dev server with helpful URLs
 ```
 
-Then open <http://localhost:3000>. No auth, no cloud, no env wrangling
-beyond `.env`. First run takes ~90 s on a warm install (mostly the
-Postgres pull); subsequent `setup` calls skip work that's already done.
+Then open <http://localhost:3000>. No auth, no cloud, no further env
+wrangling. First run takes ~90 s on a warm install (mostly the Postgres
+pull); subsequent `setup` calls skip work that's already done.
 
 > **Postgres-only since the Phase 12B/12C correction.** Prisma 5.x does
 > not support an env-driven `provider`, so we cannot switch SQLite ⇄
@@ -190,8 +198,8 @@ npm run ml:predict                 # baseline ML predictions (Phase 8)
 
 | Path                       | `DATABASE_URL`                                              | Notes |
 | -------------------------- | ----------------------------------------------------------- | ----- |
-| Local dev (Docker compose) | `postgresql://edurag:edurag_local_password@localhost:5432/edurag` | Booted by `docker compose up -d db`. Password is interpolated from `.env` (see `POSTGRES_PASSWORD`). |
-| GitHub Actions CI          | `postgresql://edurag:edurag_ci_password@localhost:5432/edurag`    | A `postgres:16-alpine` service container is wired into the job. |
+| Local dev (Docker compose) | `postgresql://edurag:<your-local-password>@localhost:5432/edurag` | Booted by `docker compose up -d db`. **You must set `POSTGRES_PASSWORD` in `.env` first** — compose refuses to start without it (the repo ships zero credential literals). Suggested: `openssl rand -base64 24`. |
+| GitHub Actions CI          | `postgresql://edurag:$CI_PG_PW@localhost:5432/edurag`             | A `postgres:16-alpine` service container is wired into the job. Password is `${{ secrets.CI_POSTGRES_PASSWORD }}` with a non-entropy throwaway fallback for fresh forks. |
 | Vercel / Neon (prod)       | `postgresql://…@…-pooler.aws.neon.tech/edurag?sslmode=require`    | Set `DIRECT_URL` to the unpooled DSN for migrations + seed. |
 
 The schema lives at [`prisma/schema.prisma`](prisma/schema.prisma) with
@@ -205,10 +213,16 @@ when the operator generates it via `npx prisma migrate dev --name initial`.
 ### Local-Postgres workflow
 
 ```bash
-docker compose up -d db                       # start Postgres
-cp .env.example .env                          # defaults already point at the service
-npm install
-npm run prisma:generate
+# 1. Set a strong local password ONCE — no credential ships in the repo.
+cp .env.example .env
+#    Edit .env:
+#      POSTGRES_PASSWORD=<value you choose; e.g. `openssl rand -base64 24`>
+#      DATABASE_URL=postgresql://edurag:<same value>@localhost:5432/edurag?schema=public
+#      DIRECT_URL=postgresql://edurag:<same value>@localhost:5432/edurag?schema=public
+
+# 2. Boot Postgres + run the full pipeline.
+docker compose up -d db                       # compose refuses to start if POSTGRES_PASSWORD is unset
+npm install                                   # postinstall: prisma generate (auto)
 npx prisma db push                            # create tables from schema
 npm run setup                                 # idempotent — ingest + estimate + simulate + predict
 npm run demo
