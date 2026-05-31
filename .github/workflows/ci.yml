@@ -23,6 +23,35 @@
 # pass (which invokes Prisma probes from the global <AppShell>) finds the
 # tables it expects. The <DatasetModeBanner> fallback added in Phase 12A
 # still protects us if anything in this chain breaks.
+#
+# ---------------------------------------------------------------------------
+# CI credentials posture (GitGuardian context):
+#
+#   `edurag_ci_password` is an INTENTIONALLY FIXED, URL-safe, CI-only
+#   throwaway literal. It is:
+#     - bound to the postgres service container in this single workflow run
+#     - reachable only from inside the runner (the service exposes
+#       :5432 on the runner's localhost; no public network)
+#     - destroyed when the runner is torn down at the end of the job
+#     - NOT a production credential — production runs on Vercel + Neon
+#       with secrets that live only in the Vercel project env
+#
+#   Why a literal instead of `${{ secrets.* }}`:
+#     A previous version of this workflow used
+#     `${{ secrets.CI_POSTGRES_PASSWORD || 'fallback' }}` and constructed
+#     DATABASE_URL by string interpolation. That broke `prisma db push`
+#     with P1013 ("invalid port number in database URL") when a real
+#     secret value contained URL-unsafe characters (`:`, `/`, `@`, `?`,
+#     `#`, `&`, `+`, `=`, `%`, …). A fixed URL-safe literal removes the
+#     class of bug entirely.
+#
+#   If GitGuardian flags this literal as a secret: it is not. Mark as
+#   resolved / not a leak / sample credential per their dashboard
+#   options. Alternative: switch to a GitHub Actions secret AND
+#   URL-encode it before constructing the DSN (e.g. via a `uses:`
+#   step that runs `python -c "urllib.parse.quote(...)"`). The fixed
+#   literal is the simpler, less-bug-prone path.
+# ---------------------------------------------------------------------------
 
 name: CI
 
@@ -42,20 +71,12 @@ jobs:
     timeout-minutes: 10
 
     services:
-      # Ephemeral Postgres bound to this single CI run. Password is sourced
-      # from `secrets.CI_POSTGRES_PASSWORD` so the repo contains no
-      # credential string. If the secret is unset the fallback is the
-      # literal `ci-throwaway-not-a-secret` — explicitly non-entropy so
-      # GitGuardian's scanner recognises it as a placeholder and not a
-      # real credential. Forks running CI for the first time can either
-      # add a `CI_POSTGRES_PASSWORD` secret in the repo settings (preferred)
-      # or rely on the throwaway literal (acceptable — the value is bound
-      # to the runner's ephemeral container and never leaves it).
       postgres:
         image: postgres:16-alpine
         env:
+          # CI-only throwaway credentials — see header comment above.
           POSTGRES_USER: edurag
-          POSTGRES_PASSWORD: ${{ secrets.CI_POSTGRES_PASSWORD || 'ci-throwaway-not-a-secret' }}
+          POSTGRES_PASSWORD: edurag_ci_password
           POSTGRES_DB: edurag
         ports:
           - 5432:5432
@@ -69,12 +90,17 @@ jobs:
           --health-retries=10
 
     env:
-      DATABASE_URL: "postgresql://edurag:${{ secrets.CI_POSTGRES_PASSWORD || 'ci-throwaway-not-a-secret' }}@localhost:5432/edurag?schema=public"
-      DIRECT_URL: "postgresql://edurag:${{ secrets.CI_POSTGRES_PASSWORD || 'ci-throwaway-not-a-secret' }}@localhost:5432/edurag?schema=public"
+      # Fixed URL-safe DSN — must match the service container env above.
+      # Both URLs are identical in CI (no connection pooler).
+      DATABASE_URL: postgresql://edurag:edurag_ci_password@localhost:5432/edurag
+      DIRECT_URL: postgresql://edurag:edurag_ci_password@localhost:5432/edurag
       # Keep CI noise low for the optional Python engine probes — there's
       # no Python on the GitHub runner by default and the TS baseline is
       # the only thing the tests exercise.
       ENABLE_PYTHON_ENGINE: "false"
+      # Stay in local-demo mode for CI — the hosted-only banner + upload
+      # row-cap are tested via unit overrides, not env coupling.
+      DEMO_MODE: "local"
 
     steps:
       - name: Checkout
@@ -99,6 +125,9 @@ jobs:
             ${{ runner.os }}-next-
 
       - name: Generate Prisma client
+        # `npm ci` already runs the package.json `postinstall: prisma generate`
+        # step, so this is redundant — kept as an explicit guarantee that
+        # the client matches the committed schema before `db push`.
         run: npx prisma generate
 
       - name: Materialise Postgres schema
@@ -114,4 +143,7 @@ jobs:
         run: npm test
 
       - name: Build
+        # package.json `build` is `prisma generate && next build` so the
+        # Prisma client is regenerated one more time immediately before
+        # Next sees it — defence in depth for Vercel's dep-cache scenario.
         run: npm run build

@@ -27,6 +27,7 @@
 |  12C  | Vercel deployment + nightly reseed          | ✅ Code complete | 2026-05-30 |
 | 12B/C | Postgres-only correction (Prisma 5.x limit)  | ✅ Applied     | 2026-05-30   |
 | 12C+  | Vercel postinstall + GitGuardian hardening   | ✅ Applied     | 2026-05-30   |
+| 12C++ | CI DATABASE_URL fix (P1013 invalid port)     | ✅ Applied     | 2026-05-30   |
 |  12D  | Screenshots, README, video, CV, LinkedIn    | ⏸ Not started | —            |
 
 See `docs/logs/` for per-execution logs and `docs/features/` for per-feature specs.
@@ -988,6 +989,83 @@ Settings → Secrets and variables → Actions → New repository secret
 Mark the docker-compose.yml alert as RESOLVED. The credential-shaped
 fallback is gone; the file now contains zero literal secrets.
 ```
+
+---
+
+### Phase 12C++ — CI DATABASE_URL fix (P1013, 2026-05-30)
+
+**Why this exists.** The Phase 12C+ secrets-hardening pass replaced
+the literal CI Postgres password with
+`${{ secrets.CI_POSTGRES_PASSWORD || 'ci-throwaway-not-a-secret' }}`
+and string-interpolated that value into `DATABASE_URL`. When the
+operator set a real GitHub Actions secret whose value contained
+URL-unsafe characters (`:` `/` `@` `?` `#` `&` `+` `=` `%` space),
+the resulting DSN was malformed and `prisma db push` rejected it:
+
+```
+Error: P1013
+The provided database string is invalid. invalid port number
+in database URL.
+```
+
+(Prisma's URL parser saw the unescaped character mid-DSN, mis-split
+on `:`, and reported the next token as a port.)
+
+**Fix.** Stop dynamic interpolation entirely. Use a fixed,
+URL-safe, CI-only throwaway literal everywhere CI needs the
+Postgres credential. This removes the entire class of bug.
+
+**Changes shipped:**
+
+- [x] `.github/workflows/ci.yml`:
+  - `services.postgres.env.POSTGRES_PASSWORD: edurag_ci_password` (fixed literal, URL-safe).
+  - `env.DATABASE_URL: postgresql://edurag:edurag_ci_password@localhost:5432/edurag`.
+  - `env.DIRECT_URL: postgresql://edurag:edurag_ci_password@localhost:5432/edurag`.
+  - `env.DEMO_MODE: "local"` made explicit (was implicit/unset).
+  - Removed the `${{ secrets.CI_POSTGRES_PASSWORD || ... }}` expressions.
+  - Expanded the header comment block to explain: the literal is CI-only, bound to the service container, reachable only from the runner's localhost, destroyed at job tear-down, never reaches production. Documented GitHub Secrets + URL-encode as the alternative if a project ever wants secret-managed CI credentials.
+
+**Why a literal is acceptable here (security analysis):**
+
+- The Postgres service container exists only during a single
+  workflow run.
+- It binds to the runner's `localhost:5432` — not reachable from
+  the public internet, other GitHub Actions runners, or any
+  long-lived infrastructure.
+- The container is destroyed when the runner is torn down at end
+  of job.
+- The credential is never used in production. Vercel + Neon get
+  their own values from Vercel's project env block; nothing in CI
+  is shared with production.
+- GitGuardian classifies this as a sample/test credential when
+  flagged (or it can be marked resolved with a comment).
+
+**Verification:**
+
+| # | Command | Result |
+| - | ------- | ------ |
+| 1 | `npx tsc --noEmit` | ✅ Clean. |
+| 2 | `npm test` | ✅ **313 / 313** pass. |
+| 3 | `npm run build` (placeholder DSN) | ✅ Compiled, 23 routes, all static pages generated. |
+| 4 | `prisma db push` (CI-only) | Will run against the Postgres service container with the fixed DSN — verified locally that the URL is syntactically valid per Prisma's parser (no P1013). |
+
+**Operator's manual steps after this fix:**
+
+1. Pull the change.
+2. (Optional) Delete the `CI_POSTGRES_PASSWORD` GitHub repository
+   secret if it was created — it is no longer referenced.
+3. Re-run the failing CI job. The `prisma db push` step should
+   now succeed against the postgres:16-alpine service container.
+
+> **GitGuardian note:** the literal `edurag_ci_password` may still
+> trigger GitGuardian on this workflow file. Mark it as a CI-only
+> sample credential per their dashboard (most projects classify
+> ephemeral-test-container creds as non-secrets). If GitGuardian
+> insists, the long-term path is to URL-encode a secret-managed
+> password before constructing the DSN — but that adds an extra
+> workflow step and a Python-or-Node dependency just for
+> `urllib.parse.quote`. The fixed literal is the simpler, less
+> bug-prone path for CI-only ephemeral credentials.
 
 ---
 
