@@ -4,28 +4,44 @@
 > data into **causally-grounded, intervention-oriented** recommendations —
 > not just a black-box risk score.
 
-[![tests](https://img.shields.io/badge/tests-305%20passing-brightgreen)]()
+[![tests](https://img.shields.io/badge/tests-313%20passing-brightgreen)]()
 [![typecheck](https://img.shields.io/badge/typecheck-clean-brightgreen)]()
 [![build](https://img.shields.io/badge/build-passing-brightgreen)]()
-[![phase](https://img.shields.io/badge/phase-12A%20github%20readiness-blue)]()
+[![phase](https://img.shields.io/badge/phase-12C%20vercel%20deploy-blue)]()
 [![license](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
 <!-- Live demo + CI / Vercel status badges land in Phase 12D after the first deploy goes up. -->
 
 
 ---
 
-## Two-command demo
+## Local demo
 
 ```bash
 git clone <repo-url> && cd "EduRAG Prototype"
 
-npm run setup    # idempotent: installs deps, migrates, seeds, runs the full pipeline
-npm run demo     # setup-if-needed + dev server with helpful URLs
+# 1. Copy the env template + set a strong POSTGRES_PASSWORD (required —
+#    docker compose refuses to start without it). The repo contains
+#    zero credential literals.
+cp .env.example .env
+#    Edit .env, fill in POSTGRES_PASSWORD and the two URL fields below it.
+#    Suggested: `openssl rand -base64 24` for a strong local-only value.
+
+# 2. Boot Postgres + the full pipeline.
+docker compose up -d db          # start Postgres on :5432 (env-required)
+npm install                      # postinstall regenerates the Prisma client
+npm run setup                    # push schema, ingest, estimate, simulate, predict
+npm run demo                     # setup-if-needed + dev server with helpful URLs
 ```
 
-Then open <http://localhost:3000>. No auth, no cloud, no env wrangling.
-First run takes ~60 s on a warm install; subsequent `setup` calls skip
-work that's already done.
+Then open <http://localhost:3000>. No auth, no cloud, no further env
+wrangling. First run takes ~90 s on a warm install (mostly the Postgres
+pull); subsequent `setup` calls skip work that's already done.
+
+> **Postgres-only since the Phase 12B/12C correction.** Prisma 5.x does
+> not support an env-driven `provider`, so we cannot switch SQLite ⇄
+> Postgres at runtime. Local dev uses the Postgres service in
+> `docker-compose.yml`; production runs against Neon on Vercel. See
+> the "Database" section below for the env-var matrix.
 
 ```bash
 # Diagnostics
@@ -64,12 +80,12 @@ distinction is impossible to miss.
 | ---------------- | ---------------------------------------------------------------------------- |
 | Frontend         | Next.js 15 (App Router) + React 19 + Tailwind CSS                            |
 | Backend          | Next.js server actions / route handlers + Prisma                             |
-| Database         | SQLite for the MVP — Postgres-portable schema                                |
+| Database         | Postgres 16 (local Docker, CI service, Neon in prod) — Prisma 5.x            |
 | Causal engine    | Pure-TS baseline (custom OLS + bootstrap + PC discovery) **or** optional Python worker (DoWhy + `causal-learn`) |
 | Prediction       | Pure-TS L2 logistic regression **or** optional Python worker (sklearn LR / RF) |
 | Visualisation    | Custom SVG charts and DAG renderer — zero charting library deps              |
 | Testing          | Vitest                                                                       |
-| Optional Docker  | Single Dockerfile + docker-compose; SQLite volume, no orchestration          |
+| Docker compose   | App + Postgres 16-alpine service. `docker compose up -d db` is now part of the local dev path. |
 
 **Zero new runtime dependencies were added in Phases 5 – 9.** Charts, DAG
 renderer, mock LMS, CSV upload pipeline, causal estimator, PC discovery,
@@ -97,7 +113,7 @@ logistic regression, and the bootstrap CLI are all hand-rolled.
               └─────────────────┬──────────────┴─────────────────────────────────┘
                                 │
                         ┌───────▼────────┐
-                        │ Prisma + SQLite│
+                        │ Prisma + Postgres│
                         │ /prisma/        │
                         └────────────────┘
 ```
@@ -165,14 +181,60 @@ one-at-a-time:
 ```bash
 npm install
 cp .env.example .env
+docker compose up -d db            # local Postgres on :5432
 npm run prisma:generate
-npx prisma migrate deploy          # idempotent; safe to re-run
+npx prisma db push                 # materialise the schema (no migration history yet)
 
 npm run data:generate              # write data/raw/sample_lms_data.csv
-npm run db:ingest                  # CSV → SQLite + weekly + RDI + course features
+npm run db:ingest                  # CSV → Postgres + weekly + RDI + course features
 npm run causal:estimate            # cohort-level β + refutations
 npm run causal:simulate            # per-student counterfactual interventions
 npm run ml:predict                 # baseline ML predictions (Phase 8)
+```
+
+---
+
+## Database (Postgres only)
+
+| Path                       | `DATABASE_URL`                                              | Notes |
+| -------------------------- | ----------------------------------------------------------- | ----- |
+| Local dev (Docker compose) | `postgresql://edurag:<your-local-password>@localhost:5432/edurag` | Booted by `docker compose up -d db`. **You must set `POSTGRES_PASSWORD` in `.env` first** — compose refuses to start without it (the repo ships zero credential literals). Suggested: `openssl rand -base64 24`. |
+| GitHub Actions CI          | `postgresql://edurag:$CI_PG_PW@localhost:5432/edurag`             | A `postgres:16-alpine` service container is wired into the job. Password is `${{ secrets.CI_POSTGRES_PASSWORD }}` with a non-entropy throwaway fallback for fresh forks. |
+| Vercel / Neon (prod)       | `postgresql://…@…-pooler.aws.neon.tech/edurag?sslmode=require`    | Set `DIRECT_URL` to the unpooled DSN for migrations + seed. |
+
+The schema lives at [`prisma/schema.prisma`](prisma/schema.prisma) with
+`provider = "postgresql"` (literal — Prisma 5.x does not support
+`env()` here). The legacy SQLite migrations are archived under
+[`prisma/migrations-sqlite/`](prisma/migrations-sqlite/) for reference;
+the active Postgres path is currently driven by `prisma db push`
+against the schema, with a committed Postgres migration set to follow
+when the operator generates it via `npx prisma migrate dev --name initial`.
+
+### Local-Postgres workflow
+
+```bash
+# 1. Set a strong local password ONCE — no credential ships in the repo.
+cp .env.example .env
+#    Edit .env:
+#      POSTGRES_PASSWORD=<value you choose; e.g. `openssl rand -base64 24`>
+#      DATABASE_URL=postgresql://edurag:<same value>@localhost:5432/edurag?schema=public
+#      DIRECT_URL=postgresql://edurag:<same value>@localhost:5432/edurag?schema=public
+
+# 2. Boot Postgres + run the full pipeline.
+docker compose up -d db                       # compose refuses to start if POSTGRES_PASSWORD is unset
+npm install                                   # postinstall: prisma generate (auto)
+npx prisma db push                            # create tables from schema
+npm run setup                                 # idempotent — ingest + estimate + simulate + predict
+npm run demo
+```
+
+### Resetting to a clean state
+
+```bash
+docker compose down -v                        # wipe the Postgres volume entirely
+docker compose up -d db
+npx prisma db push                            # recreate the schema
+npm run setup                                 # repopulate
 ```
 
 ---
@@ -225,9 +287,10 @@ docker compose up
 ```
 
 The container runs `npx prisma migrate deploy && npm run setup &&
-npm start` on first boot — the SQLite database + generated CSV are
-persisted to named volumes (`edurag_db`, `edurag_data`) so subsequent
-boots short-circuit the seed.
+npm start` on first boot — the Postgres data directory + generated
+CSV / Shell University seed are persisted to named volumes
+(`edurag_pg`, `edurag_data`) so subsequent boots short-circuit the
+seed.
 
 ---
 
@@ -294,7 +357,7 @@ full method spec.
     /actions     Server actions (upload, what-if)
     /bootstrap   Phase-9 setup / demo / doctor / status / reset CLIs
     /causal      Causal orchestrators + CLIs (estimate, simulate, discover, report)
-    /ingest      CSV → SQLite ingest + derive
+    /ingest      CSV → Postgres ingest + derive
     /prediction  Phase-8 train + predict orchestration + CLI
     /queries     Read-only data access for the UI
     /sync        Shell University sync layer (transports, mapper, orchestrator)

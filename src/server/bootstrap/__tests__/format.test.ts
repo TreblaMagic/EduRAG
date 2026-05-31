@@ -23,10 +23,10 @@ const mixedGroup: CheckGroup = {
   results: [
     { id: "db.client", label: "Prisma client", status: "ok", detail: "generated" },
     {
-      id: "db.file",
-      label: "SQLite database",
+      id: "db.url",
+      label: "DATABASE_URL",
       status: "missing",
-      detail: "not found",
+      detail: "unset",
       hint: "Run `npm run setup`",
     },
     {
@@ -99,7 +99,7 @@ describe("renderCheckGroups", () => {
     expect(out).toContain("▌ Environment");
     expect(out).toContain("▌ Database");
     expect(out).toContain("[ ok ] Node.js");
-    expect(out).toContain("[miss] SQLite database");
+    expect(out).toContain("[miss] DATABASE_URL");
     expect(out).toContain("[ err] Prisma row counts");
   });
 });

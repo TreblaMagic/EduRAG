@@ -2,8 +2,8 @@ export {
   readState,
   writeState,
   normaliseState,
-  statePathFor,
   type StoreOptions,
+  type AppSettingClient,
 } from "./store";
 
 export {

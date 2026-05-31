@@ -83,26 +83,28 @@ export async function dbChecks(
     hint: clientOk ? undefined : "Run `npm run prisma:generate`",
   };
 
-  const dbUrl = options.databaseUrl ?? process.env.DATABASE_URL ?? "file:./prisma/dev.db";
-  const dbFilePath = dbUrl.startsWith("file:")
-    ? resolve(ROOT, dbUrl.slice("file:".length))
-    : null;
-  const dbExists = dbFilePath ? existsSync(dbFilePath) : false;
-  const dbFileCheck: CheckResult = {
-    id: "db.file",
-    label: "SQLite database",
-    status: dbExists ? "ok" : "missing",
-    detail: dbFilePath
-      ? `${dbExists ? "found" : "not found"} at ${relativeFromRoot(dbFilePath)}`
-      : "non-file URL — assumed remote",
-    hint: dbExists
+  // Phase 12B/12C correction: EduRAG is Postgres-only now. The previous
+  // SQLite-file existence probe is replaced with a `DATABASE_URL` shape
+  // check + an actual table probe (driven by the row-count block below).
+  const dbUrl = options.databaseUrl ?? process.env.DATABASE_URL ?? "";
+  const urlOk = dbUrl.startsWith("postgresql://") || dbUrl.startsWith("postgres://");
+  const dbUrlCheck: CheckResult = {
+    id: "db.url",
+    label: "DATABASE_URL",
+    status: urlOk ? "ok" : "missing",
+    detail: urlOk
+      ? `points at Postgres (${redactDsn(dbUrl)})`
+      : dbUrl
+        ? "not a postgres:// URL"
+        : "unset",
+    hint: urlOk
       ? undefined
-      : "Run `npx prisma migrate deploy` (or `npm run setup` to do everything)",
+      : "Set DATABASE_URL in `.env` (see `.env.example`) and run `docker compose up -d db`",
   };
 
-  const results: CheckResult[] = [clientCheck, dbFileCheck];
+  const results: CheckResult[] = [clientCheck, dbUrlCheck];
 
-  if (prisma && clientOk && dbExists) {
+  if (prisma && clientOk && urlOk) {
     try {
       const [students, courses, weekly, estimates, simulations, predictions, syncs] =
         await Promise.all([
@@ -127,10 +129,12 @@ export async function dbChecks(
         label: "Prisma row counts",
         status: "error",
         detail: e instanceof Error ? e.message : String(e),
-        hint: "Migrations may be out of date. Run `npx prisma migrate deploy`.",
+        hint:
+          "Schema may not be applied. Run `npx prisma db push` " +
+          "(or `npm run setup` to do everything).",
       });
     }
-  } else if (clientOk && dbExists) {
+  } else if (clientOk && urlOk) {
     results.push({
       id: "data.counts",
       label: "Prisma row counts",
@@ -247,6 +251,25 @@ function humanBytes(n: number): string {
 
 function relativeFromRoot(p: string): string {
   return p.startsWith(ROOT) ? p.slice(ROOT.length).replace(/^[\\/]/, "") : p;
+}
+
+/**
+ * Phase 12B/12C correction: strip the password from a Postgres DSN
+ * before echoing it to the doctor output. We still want the host /
+ * database / scheme visible so the operator can spot wrong-env
+ * mistakes (e.g. pointing local at Neon by accident).
+ *
+ *   postgresql://user:pass@host:5432/db?sslmode=require
+ *   → postgresql://user:***@host:5432/db?sslmode=require
+ */
+function redactDsn(dsn: string): string {
+  try {
+    const u = new URL(dsn);
+    if (u.password) u.password = "***";
+    return u.toString();
+  } catch {
+    return dsn.replace(/(postgres(?:ql)?:\/\/[^:]+:)[^@]+(@)/i, "$1***$2");
+  }
 }
 
 async function probePython(): Promise<CheckResult> {

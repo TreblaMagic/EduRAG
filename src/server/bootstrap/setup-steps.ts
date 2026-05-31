@@ -24,6 +24,14 @@ export interface BuildSetupStepsOptions {
   countEstimates: () => Promise<number>;
   countSimulations: () => Promise<number>;
   countPredictions: () => Promise<number>;
+  /**
+   * Phase 12B/12C correction: probe to see whether the Postgres schema
+   * is already materialised. When the underlying table query throws
+   * (table missing) we run `prisma db push`; when it returns we skip.
+   * Defaults to `countStudents` so the existing test fixtures still
+   * work without modification.
+   */
+  schemaApplied?: () => Promise<boolean>;
 }
 
 const NPM = process.platform === "win32" ? "npm.cmd" : "npm";
@@ -31,9 +39,24 @@ const NPX = process.platform === "win32" ? "npx.cmd" : "npx";
 
 export function buildSetupSteps(options: BuildSetupStepsOptions): SetupStep[] {
   const csvPath = resolve(ROOT, "data", "raw", "sample_lms_data.csv");
-  const dbPath = resolve(ROOT, "prisma", "dev.db");
   const nextModule = resolve(ROOT, "node_modules", "next");
   const prismaClient = resolve(ROOT, "node_modules", ".prisma", "client");
+
+  // Phase 12B/12C correction: EduRAG is Postgres-only now. The legacy
+  // "SQLite file exists" probe is gone — we instead try a table query
+  // and treat a thrown error as "schema not yet applied". If the
+  // operator wants to inject a different probe (e.g. a tests fixture
+  // that returns false unconditionally), they pass `schemaApplied`.
+  const schemaProbe =
+    options.schemaApplied ??
+    (async () => {
+      try {
+        await options.countStudents();
+        return true;
+      } catch {
+        return false;
+      }
+    });
 
   return [
     {
@@ -58,15 +81,26 @@ export function buildSetupSteps(options: BuildSetupStepsOptions): SetupStep[] {
     },
     {
       id: "migrate",
-      label: "Apply Prisma migrations",
-      shouldRun: () => !existsSync(dbPath),
+      label: "Apply Postgres schema (prisma db push)",
+      shouldRun: async () => !(await schemaProbe()),
       run: async () => {
-        // `migrate deploy` is non-interactive and idempotent for
-        // already-applied migrations — perfect for setup automation.
-        await runCommand(NPX, ["prisma", "migrate", "deploy"]);
+        // `db push` is the right tool now that there is no committed
+        // migration history yet (the SQLite migrations are archived
+        // under prisma/migrations-sqlite/). It is idempotent against
+        // an already-applied schema and creates whatever's missing.
+        // Once the operator generates the first Postgres migration
+        // with `npx prisma migrate dev --name initial`, this step
+        // can be swapped back to `migrate deploy`.
+        await runCommand(NPX, [
+          "prisma",
+          "db",
+          "push",
+          "--skip-generate",
+          "--accept-data-loss",
+        ]);
       },
-      skipDetail: "SQLite database already exists",
-      doneDetail: "Migrations applied",
+      skipDetail: "Postgres schema already applied",
+      doneDetail: "Postgres schema materialised",
     },
     {
       id: "data-generate",

@@ -1,8 +1,9 @@
 /**
  * Phase 10 — dataset-mode orchestrator.
  *
- * The thin layer that glues the JSON store to Prisma probes + the pure
- * snapshot/metadata helpers. Used by:
+ * The thin layer that glues the persisted state (Phase 12B: a row in
+ * `AppSetting`) to Prisma probes + the pure snapshot/metadata helpers.
+ * Used by:
  *
  *   - the global `<DatasetModeBanner>` on shared layout headers
  *   - the `/datasets` overview + switcher page
@@ -30,7 +31,7 @@ import {
 } from "@/features/dataset-modes";
 import { prisma as defaultPrisma } from "@/lib/db";
 
-import { readState, writeState, type StoreOptions } from "./store";
+import { readState, writeState, type AppSettingClient } from "./store";
 
 export interface DatasetModeOverview {
   activeMode: DatasetMode;
@@ -42,10 +43,9 @@ export interface DatasetModeOverview {
 
 export async function getDatasetModeOverview(
   prisma: PrismaClient = defaultPrisma,
-  options: StoreOptions = {},
 ): Promise<DatasetModeOverview> {
-  const state = readState(options);
-  const [counts, latest] = await Promise.all([
+  const [state, counts, latest] = await Promise.all([
+    readState({ prisma: prisma as unknown as AppSettingClient }),
     fetchCounts(prisma),
     fetchLatestSyncs(prisma),
   ]);
@@ -59,27 +59,28 @@ export async function getDatasetModeOverview(
 }
 
 export async function getActiveDatasetMode(
-  options: StoreOptions = {},
+  prisma: PrismaClient = defaultPrisma,
 ): Promise<DatasetMode> {
-  return readState(options).activeMode;
+  const state = await readState({ prisma: prisma as unknown as AppSettingClient });
+  return state.activeMode;
 }
 
 /**
  * Persist the new active mode and return the updated state. Idempotent
- * when called with the current active mode (still rewrites the file with
+ * when called with the current active mode (still rewrites the row with
  * a fresh timestamp + reason).
  */
-export function setActiveDatasetMode(
+export async function setActiveDatasetMode(
   mode: DatasetMode,
   reason: string | null = null,
-  options: StoreOptions = {},
-): DatasetModeStateFile {
+  prisma: PrismaClient = defaultPrisma,
+): Promise<DatasetModeStateFile> {
   const next: DatasetModeStateFile = {
     activeMode: mode,
     switchedAt: new Date().toISOString(),
     reason,
   };
-  writeState(next, options);
+  await writeState(next, { prisma: prisma as unknown as AppSettingClient });
   return next;
 }
 

@@ -1,15 +1,43 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
+import { beforeEach, describe, expect, it } from "vitest";
 
-import { normaliseState, readState, statePathFor, writeState } from "../store";
+import { normaliseState, readState, writeState } from "../store";
+import type { AppSettingClient } from "../store";
 
 const DEFAULT = {
   activeMode: "synthetic",
   switchedAt: "1970-01-01T00:00:00.000Z",
   reason: "Default — no explicit selection made yet.",
 };
+
+/**
+ * In-memory `AppSetting` fake — implements the slice of the Prisma
+ * client the store actually calls. Lets us exercise the read/write
+ * round-trip and the corruption-recovery branches without spinning
+ * up a real database.
+ */
+function createPrismaFake(initial: Record<string, string> = {}): {
+  client: AppSettingClient;
+  rows: Map<string, string>;
+} {
+  const rows = new Map<string, string>(Object.entries(initial));
+  const client: AppSettingClient = {
+    appSetting: {
+      async findUnique({ where }) {
+        const value = rows.get(where.key);
+        return value === undefined ? null : { key: where.key, value };
+      },
+      async upsert({ where, create, update }) {
+        if (rows.has(where.key)) {
+          rows.set(where.key, update.value);
+        } else {
+          rows.set(where.key, create.value);
+        }
+        return null;
+      },
+    },
+  };
+  return { client, rows };
+}
 
 describe("normaliseState", () => {
   it("returns the default when input is null or empty", () => {
@@ -53,63 +81,62 @@ describe("normaliseState", () => {
   });
 });
 
-describe("statePathFor", () => {
-  it("defaults to data/processed/dataset-mode.json under the cwd", () => {
-    const path = statePathFor();
-    expect(path).toBe(resolve(process.cwd(), "data", "processed", "dataset-mode.json"));
-  });
-
-  it("honours an explicit path override", () => {
-    const explicit = "/tmp/edurag-test/state.json";
-    expect(statePathFor({ path: explicit })).toBe(explicit);
-  });
-});
-
-describe("readState / writeState round-trip (filesystem)", () => {
-  let tmpDir: string;
-  let tmpPath: string;
+describe("readState / writeState round-trip (Prisma AppSetting)", () => {
+  let fake: ReturnType<typeof createPrismaFake>;
 
   beforeEach(() => {
-    tmpDir = mkdtempSync(join(tmpdir(), "edurag-mode-"));
-    tmpPath = join(tmpDir, "dataset-mode.json");
+    fake = createPrismaFake();
   });
 
-  afterEach(() => {
-    rmSync(tmpDir, { recursive: true, force: true });
+  it("returns the default when the row is missing", async () => {
+    expect(await readState({ prisma: fake.client })).toEqual(DEFAULT);
   });
 
-  it("returns the default when the file is missing", () => {
-    expect(readState({ path: tmpPath })).toEqual(DEFAULT);
-  });
-
-  it("round-trips a written state", () => {
-    writeState(
+  it("round-trips a written state through the AppSetting row", async () => {
+    await writeState(
       {
         activeMode: "shell-university",
         switchedAt: "2026-05-28T12:00:00.000Z",
         reason: "syncing the LMS demo",
       },
-      { path: tmpPath },
+      { prisma: fake.client },
     );
-    expect(existsSync(tmpPath)).toBe(true);
-    const out = readState({ path: tmpPath });
+    const out = await readState({ prisma: fake.client });
     expect(out.activeMode).toBe("shell-university");
     expect(out.switchedAt).toBe("2026-05-28T12:00:00.000Z");
     expect(out.reason).toBe("syncing the LMS demo");
+    // The persisted blob is JSON-encoded under the `dataset-mode` key.
+    expect(JSON.parse(fake.rows.get("dataset-mode")!)).toEqual(out);
   });
 
-  it("recovers gracefully from a corrupted file", () => {
-    writeFileSync(tmpPath, "{ not valid json", "utf8");
-    expect(readState({ path: tmpPath })).toEqual(DEFAULT);
+  it("recovers gracefully from a corrupted value", async () => {
+    fake = createPrismaFake({ "dataset-mode": "{ not valid json" });
+    expect(await readState({ prisma: fake.client })).toEqual(DEFAULT);
   });
 
-  it("recovers gracefully from a file containing an unknown mode", () => {
-    writeFileSync(
-      tmpPath,
-      JSON.stringify({ activeMode: "telepathy", switchedAt: "2026-01-01", reason: "x" }),
-      "utf8",
-    );
-    const out = readState({ path: tmpPath });
+  it("recovers gracefully from a row containing an unknown mode", async () => {
+    fake = createPrismaFake({
+      "dataset-mode": JSON.stringify({
+        activeMode: "telepathy",
+        switchedAt: "2026-01-01T00:00:00.000Z",
+        reason: "x",
+      }),
+    });
+    const out = await readState({ prisma: fake.client });
     expect(out.activeMode).toBe(DEFAULT.activeMode);
+  });
+
+  it("falls back to the default when the underlying client throws", async () => {
+    const broken: AppSettingClient = {
+      appSetting: {
+        async findUnique() {
+          throw new Error("DB unreachable");
+        },
+        async upsert() {
+          throw new Error("DB unreachable");
+        },
+      },
+    };
+    expect(await readState({ prisma: broken })).toEqual(DEFAULT);
   });
 });

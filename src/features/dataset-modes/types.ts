@@ -61,7 +61,11 @@ export interface DatasetModeSnapshot {
   isActive: boolean;
 }
 
-/** Shape persisted to `data/processed/dataset-mode.json`. */
+/**
+ * Shape persisted as the JSON `value` of the `AppSetting` row keyed
+ * by `"dataset-mode"` (Phase 12B; was a JSON file under
+ * `data/processed/` in Phase 10).
+ */
 export interface DatasetModeStateFile {
   /** Active mode the user has declared canonical. */
   activeMode: DatasetMode;

@@ -1,0 +1,130 @@
+[
+  {
+    "note_id": "note_STU0028_0",
+    "student_id": "STU-0028",
+    "course_code": "CS-201",
+    "note_text": "Student on track; encouraged stretch material in weeks 10-14.",
+    "authored_by": "Prof. Okonkwo",
+    "authored_at": "2026-03-29T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0061_1",
+    "student_id": "STU-0061",
+    "course_code": "CS-201",
+    "note_text": "Recommended a study-skills check-in given recent assessment trajectory.",
+    "authored_by": "Prof. Okonkwo",
+    "authored_at": "2026-03-15T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0063_2",
+    "student_id": "STU-0063",
+    "course_code": "CS-201",
+    "note_text": "Recommended a study-skills check-in given recent assessment trajectory.",
+    "authored_by": "Dr. Lee",
+    "authored_at": "2026-03-31T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0065_3",
+    "student_id": "STU-0065",
+    "course_code": "CS-201",
+    "note_text": "Recommended a study-skills check-in given recent assessment trajectory.",
+    "authored_by": "Dr. Hayes",
+    "authored_at": "2026-04-03T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0094_4",
+    "student_id": "STU-0094",
+    "course_code": "CS-201",
+    "note_text": "Recommended a study-skills check-in given recent assessment trajectory.",
+    "authored_by": "Dr. Reyes",
+    "authored_at": "2026-02-26T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0127_5",
+    "student_id": "STU-0127",
+    "course_code": "CS-201",
+    "note_text": "Student on track; encouraged stretch material in weeks 10-14.",
+    "authored_by": "Dr. Lee",
+    "authored_at": "2026-02-23T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0147_6",
+    "student_id": "STU-0147",
+    "course_code": "CS-201",
+    "note_text": "Recommended a study-skills check-in given recent assessment trajectory.",
+    "authored_by": "Dr. Reyes",
+    "authored_at": "2026-03-27T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0148_7",
+    "student_id": "STU-0148",
+    "course_code": "CS-201",
+    "note_text": "Recommended a study-skills check-in given recent assessment trajectory.",
+    "authored_by": "Prof. Okonkwo",
+    "authored_at": "2026-04-14T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0155_8",
+    "student_id": "STU-0155",
+    "course_code": "CS-201",
+    "note_text": "Student on track; encouraged stretch material in weeks 10-14.",
+    "authored_by": "Dr. Hayes",
+    "authored_at": "2026-02-24T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0159_9",
+    "student_id": "STU-0159",
+    "course_code": "CS-201",
+    "note_text": "Discussed pacing and forum participation; student receptive.",
+    "authored_by": "Dr. Reyes",
+    "authored_at": "2026-04-07T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0173_10",
+    "student_id": "STU-0173",
+    "course_code": "CS-201",
+    "note_text": "Recommended a study-skills check-in given recent assessment trajectory.",
+    "authored_by": "Dr. Reyes",
+    "authored_at": "2026-04-16T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0177_11",
+    "student_id": "STU-0177",
+    "course_code": "CS-201",
+    "note_text": "Student on track; encouraged stretch material in weeks 10-14.",
+    "authored_by": "Dr. Reyes",
+    "authored_at": "2026-04-02T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0183_12",
+    "student_id": "STU-0183",
+    "course_code": "CS-201",
+    "note_text": "Recommended a study-skills check-in given recent assessment trajectory.",
+    "authored_by": "Dr. Reyes",
+    "authored_at": "2026-03-06T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0186_13",
+    "student_id": "STU-0186",
+    "course_code": "CS-201",
+    "note_text": "Recommended a study-skills check-in given recent assessment trajectory.",
+    "authored_by": "Dr. Hayes",
+    "authored_at": "2026-04-16T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0190_14",
+    "student_id": "STU-0190",
+    "course_code": "CS-201",
+    "note_text": "Recommended a study-skills check-in given recent assessment trajectory.",
+    "authored_by": "Dr. Reyes",
+    "authored_at": "2026-02-23T09:00:00.000Z"
+  },
+  {
+    "note_id": "note_STU0199_15",
+    "student_id": "STU-0199",
+    "course_code": "CS-201",
+    "note_text": "Recommended a study-skills check-in given recent assessment trajectory.",
+    "authored_by": "Prof. Okonkwo",
+    "authored_at": "2026-03-25T09:00:00.000Z"
+  }
+]

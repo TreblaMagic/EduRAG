@@ -224,7 +224,11 @@ export function seedShellUniversity(options: SeedOptions = {}): SeedResult {
     courses: writeEntity(outDir, "courses", courses),
     enrollments: writeEntity(outDir, "enrollments", enrollments),
     resources: writeEntity(outDir, "resources", resources),
-    "lms-events": writeEntity(outDir, "lms-events", events),
+    // Phase 12B: lms-events scales with the cohort × weeks; pretty-printing
+    // it pushes the file past Vercel's recommended bundle-asset size for
+    // committed seeds. Write it compactly. The small files stay indented
+    // so diffs on regeneration remain reviewable.
+    "lms-events": writeEntity(outDir, "lms-events", events, { compact: true }),
     grades: writeEntity(outDir, "grades", grades),
     "advisor-notes": writeEntity(outDir, "advisor-notes", advisorNotes),
     _health: writeJson(outDir, "_health.json", {
@@ -250,14 +254,23 @@ function writeEntity<K extends ShellEntity>(
   dir: string,
   entity: K,
   data: ShellEntityShape[K][],
+  options: { compact?: boolean } = {},
 ): string {
-  return writeJson(dir, `${entity}.json`, data);
+  return writeJson(dir, `${entity}.json`, data, options);
 }
 
-function writeJson<T>(dir: string, filename: string, data: T): string {
+function writeJson<T>(
+  dir: string,
+  filename: string,
+  data: T,
+  options: { compact?: boolean } = {},
+): string {
   const path = resolve(dir, filename);
   mkdirSync(dirname(path), { recursive: true });
-  writeFileSync(path, JSON.stringify(data, null, 2));
+  const body = options.compact
+    ? JSON.stringify(data)
+    : JSON.stringify(data, null, 2);
+  writeFileSync(path, body);
   return path;
 }
 

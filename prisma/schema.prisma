@@ -1,15 +1,24 @@
 // =============================================================================
-// EduRAG — Prisma schema (SQLite for MVP, designed to migrate cleanly to Postgres)
+// EduRAG — Prisma schema (Postgres only as of the Phase 12B/12C correction)
 //
-// Migration notes (SQLite -> PostgreSQL):
-//   - Switch datasource provider to "postgresql" and DATABASE_URL accordingly.
-//   - String columns holding JSON (e.g. InterventionSimulation.changeJson) can
-//     be promoted to `Json` for native PG JSONB.
-//   - String fields documented as enum-like (resource type, activity type, etc.)
-//     can be promoted to true Prisma `enum` definitions (SQLite does not
-//     support enums; Postgres does).
-//   - All `cuid()` IDs remain valid in Postgres without modification.
-//   - All indexes, unique constraints, and cascades carry over unchanged.
+// Why Postgres-only:
+//   - Prisma 5.x does NOT accept env() in the `provider` field — the
+//     attempted multi-provider switch (Phase 12B, since reverted) failed
+//     validation at `prisma generate` time. EduRAG now commits to a
+//     single provider so the schema, migrations, and client all match.
+//   - Vercel + Neon is the deployment target. Local dev uses the
+//     Postgres service in `docker-compose.yml` (`docker compose up -d db`).
+//
+// Notes for future refactors:
+//   - String columns holding JSON (e.g. InterventionSimulation.notesJson)
+//     can be promoted to `Json` for native PG JSONB if we ever want
+//     predicate pushdown.
+//   - String fields documented as enum-like (resource type, activity
+//     type, …) can be promoted to true Prisma `enum` definitions —
+//     Postgres supports them natively, SQLite did not.
+//   - `directUrl` is required when the primary `url` points at a
+//     connection-pooler (Neon, PgBouncer). Set to the unpooled DSN
+//     locally + on Vercel.
 // =============================================================================
 
 generator client {
@@ -17,8 +26,9 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // -----------------------------------------------------------------------------
@@ -405,6 +415,24 @@ model BaselinePrediction {
   @@unique([studentId, courseId, modelType])
   @@index([courseId, modelType])
   @@index([courseId, predictedRiskProb])
+}
+
+/// Phase 12B — singleton app-wide settings row.
+///
+/// Replaces the Phase 10 JSON file at `data/processed/dataset-mode.json`
+/// so the active dataset mode survives on a serverless / read-only
+/// filesystem (Vercel). One row per logical setting, keyed by a stable
+/// string (e.g. `"dataset-mode"`). The `value` column is a JSON-encoded
+/// blob — same shape as the previous file contents, so the migration
+/// is a verbatim payload move (no schema flattening).
+///
+/// Keep this table tiny — it is not a key/value cache or a generic
+/// document store. Anything that needs its own columns gets its own
+/// model.
+model AppSetting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
 }
 
 /// One row per sync attempt against a data source (Shell University,

@@ -1,0 +1,242 @@
+[
+  {
+    "resource_id": "CS-201-REA-004",
+    "course_code": "CS-201",
+    "resource_kind": "reading",
+    "title": "Reading — CS-201-REA-004"
+  },
+  {
+    "resource_id": "CS-201-FOR-008",
+    "course_code": "CS-201",
+    "resource_kind": "forum",
+    "title": "Forum — CS-201-FOR-008"
+  },
+  {
+    "resource_id": "CS-201-REA-006",
+    "course_code": "CS-201",
+    "resource_kind": "reading",
+    "title": "Reading — CS-201-REA-006"
+  },
+  {
+    "resource_id": "CS-201-LAB-004",
+    "course_code": "CS-201",
+    "resource_kind": "lab",
+    "title": "Lab — CS-201-LAB-004"
+  },
+  {
+    "resource_id": "CS-201-REA-008",
+    "course_code": "CS-201",
+    "resource_kind": "reading",
+    "title": "Reading — CS-201-REA-008"
+  },
+  {
+    "resource_id": "CS-201-LAB-002",
+    "course_code": "CS-201",
+    "resource_kind": "lab",
+    "title": "Lab — CS-201-LAB-002"
+  },
+  {
+    "resource_id": "CS-201-REA-001",
+    "course_code": "CS-201",
+    "resource_kind": "reading",
+    "title": "Reading — CS-201-REA-001"
+  },
+  {
+    "resource_id": "CS-201-LAB-008",
+    "course_code": "CS-201",
+    "resource_kind": "lab",
+    "title": "Lab — CS-201-LAB-008"
+  },
+  {
+    "resource_id": "CS-201-FOR-006",
+    "course_code": "CS-201",
+    "resource_kind": "forum",
+    "title": "Forum — CS-201-FOR-006"
+  },
+  {
+    "resource_id": "CS-201-VID-008",
+    "course_code": "CS-201",
+    "resource_kind": "video",
+    "title": "Video — CS-201-VID-008"
+  },
+  {
+    "resource_id": "CS-201-QUI-008",
+    "course_code": "CS-201",
+    "resource_kind": "quiz",
+    "title": "Quiz — CS-201-QUI-008"
+  },
+  {
+    "resource_id": "CS-201-REA-003",
+    "course_code": "CS-201",
+    "resource_kind": "reading",
+    "title": "Reading — CS-201-REA-003"
+  },
+  {
+    "resource_id": "CS-201-QUI-004",
+    "course_code": "CS-201",
+    "resource_kind": "quiz",
+    "title": "Quiz — CS-201-QUI-004"
+  },
+  {
+    "resource_id": "CS-201-LAB-003",
+    "course_code": "CS-201",
+    "resource_kind": "lab",
+    "title": "Lab — CS-201-LAB-003"
+  },
+  {
+    "resource_id": "CS-201-QUI-001",
+    "course_code": "CS-201",
+    "resource_kind": "quiz",
+    "title": "Quiz — CS-201-QUI-001"
+  },
+  {
+    "resource_id": "CS-201-FOR-001",
+    "course_code": "CS-201",
+    "resource_kind": "forum",
+    "title": "Forum — CS-201-FOR-001"
+  },
+  {
+    "resource_id": "CS-201-VID-006",
+    "course_code": "CS-201",
+    "resource_kind": "video",
+    "title": "Video — CS-201-VID-006"
+  },
+  {
+    "resource_id": "CS-201-LAB-001",
+    "course_code": "CS-201",
+    "resource_kind": "lab",
+    "title": "Lab — CS-201-LAB-001"
+  },
+  {
+    "resource_id": "CS-201-FOR-007",
+    "course_code": "CS-201",
+    "resource_kind": "forum",
+    "title": "Forum — CS-201-FOR-007"
+  },
+  {
+    "resource_id": "CS-201-VID-001",
+    "course_code": "CS-201",
+    "resource_kind": "video",
+    "title": "Video — CS-201-VID-001"
+  },
+  {
+    "resource_id": "CS-201-FOR-004",
+    "course_code": "CS-201",
+    "resource_kind": "forum",
+    "title": "Forum — CS-201-FOR-004"
+  },
+  {
+    "resource_id": "CS-201-VID-002",
+    "course_code": "CS-201",
+    "resource_kind": "video",
+    "title": "Video — CS-201-VID-002"
+  },
+  {
+    "resource_id": "CS-201-QUI-005",
+    "course_code": "CS-201",
+    "resource_kind": "quiz",
+    "title": "Quiz — CS-201-QUI-005"
+  },
+  {
+    "resource_id": "CS-201-VID-004",
+    "course_code": "CS-201",
+    "resource_kind": "video",
+    "title": "Video — CS-201-VID-004"
+  },
+  {
+    "resource_id": "CS-201-FOR-002",
+    "course_code": "CS-201",
+    "resource_kind": "forum",
+    "title": "Forum — CS-201-FOR-002"
+  },
+  {
+    "resource_id": "CS-201-VID-005",
+    "course_code": "CS-201",
+    "resource_kind": "video",
+    "title": "Video — CS-201-VID-005"
+  },
+  {
+    "resource_id": "CS-201-FOR-005",
+    "course_code": "CS-201",
+    "resource_kind": "forum",
+    "title": "Forum — CS-201-FOR-005"
+  },
+  {
+    "resource_id": "CS-201-QUI-003",
+    "course_code": "CS-201",
+    "resource_kind": "quiz",
+    "title": "Quiz — CS-201-QUI-003"
+  },
+  {
+    "resource_id": "CS-201-REA-005",
+    "course_code": "CS-201",
+    "resource_kind": "reading",
+    "title": "Reading — CS-201-REA-005"
+  },
+  {
+    "resource_id": "CS-201-QUI-006",
+    "course_code": "CS-201",
+    "resource_kind": "quiz",
+    "title": "Quiz — CS-201-QUI-006"
+  },
+  {
+    "resource_id": "CS-201-REA-002",
+    "course_code": "CS-201",
+    "resource_kind": "reading",
+    "title": "Reading — CS-201-REA-002"
+  },
+  {
+    "resource_id": "CS-201-QUI-007",
+    "course_code": "CS-201",
+    "resource_kind": "quiz",
+    "title": "Quiz — CS-201-QUI-007"
+  },
+  {
+    "resource_id": "CS-201-FOR-003",
+    "course_code": "CS-201",
+    "resource_kind": "forum",
+    "title": "Forum — CS-201-FOR-003"
+  },
+  {
+    "resource_id": "CS-201-LAB-007",
+    "course_code": "CS-201",
+    "resource_kind": "lab",
+    "title": "Lab — CS-201-LAB-007"
+  },
+  {
+    "resource_id": "CS-201-LAB-005",
+    "course_code": "CS-201",
+    "resource_kind": "lab",
+    "title": "Lab — CS-201-LAB-005"
+  },
+  {
+    "resource_id": "CS-201-VID-007",
+    "course_code": "CS-201",
+    "resource_kind": "video",
+    "title": "Video — CS-201-VID-007"
+  },
+  {
+    "resource_id": "CS-201-REA-007",
+    "course_code": "CS-201",
+    "resource_kind": "reading",
+    "title": "Reading — CS-201-REA-007"
+  },
+  {
+    "resource_id": "CS-201-QUI-002",
+    "course_code": "CS-201",
+    "resource_kind": "quiz",
+    "title": "Quiz — CS-201-QUI-002"
+  },
+  {
+    "resource_id": "CS-201-LAB-006",
+    "course_code": "CS-201",
+    "resource_kind": "lab",
+    "title": "Lab — CS-201-LAB-006"
+  },
+  {
+    "resource_id": "CS-201-VID-003",
+    "course_code": "CS-201",
+    "resource_kind": "video",
+    "title": "Video — CS-201-VID-003"
+  }
+]
